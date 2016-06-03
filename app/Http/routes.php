@@ -30,3 +30,8 @@ Route::get('logout', [
 	'as'	=> 'logout', 
 	'uses'	=> 'Auth\AuthController@getLogout',
 ]);
+
+Route::resource('stations', 'StationController');
+Route::resource('trains', 'TrainController');
+Route::resource('operators', 'OperatoController');
+Route::resource('schedules', 'ScheduleController');
