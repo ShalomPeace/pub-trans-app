@@ -2,13 +2,19 @@
 
 namespace App\Http\Controllers;
 
+use App\Repositories\Contracts\StationRepositoryInterface;
 use Illuminate\Http\Request;
 
-use App\Http\Requests;
+use App\Http\Requests\StationFormRequest;
 use App\Http\Controllers\Controller;
 
 class StationController extends Controller
 {
+    public function __construct(StationRepositoryInterface $repository)
+    {
+        $this->repository = $repository;
+    }
+
     /**
      * Display a listing of the resource.
      *
@@ -16,7 +22,9 @@ class StationController extends Controller
      */
     public function index()
     {
-        //
+        $stations = $this->repository->getAll();
+
+        return view('stations.index', ['stations' => $stations]);
     }
 
     /**
@@ -26,7 +34,7 @@ class StationController extends Controller
      */
     public function create()
     {
-        //
+        return view('stations.create');
     }
 
     /**
@@ -35,9 +43,26 @@ class StationController extends Controller
      * @param  \Illuminate\Http\Request  $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Request $request)
+    public function store(StationFormRequest $request)
     {
-        //
+        if ($station = $this->repository->create($request->only('name'))) {
+            return ! $request->ajax() ? redirect()->route('stations.show', $station)
+                                                ->with('success', "Station succesfully added.")
+                                    : response()->json([
+                                        'status'    => 1,
+                                        'message'   => 'Station successfully added.',
+                                        'data'      => $station->toJson(),
+                                        'redirect'  => route('stations.show', $station),
+                                    ]);
+        }
+
+        return ! $request->ajax() ? redirect()->route('stations.create')
+                                            ->with('error', 'Unable to add station. Please try again.')
+                                            ->withInput($request->only('name'))
+                                : response()->json([
+                                    'status'    => 0,
+                                    'message'   => 'Unable to add station. Please try again.'
+                                ]);
     }
 
     /**
@@ -48,7 +73,9 @@ class StationController extends Controller
      */
     public function show($id)
     {
-        //
+        $station = $this->repository->find($id);
+
+        return view('stations.show', ['station' => $station]);
     }
 
     /**
@@ -59,7 +86,9 @@ class StationController extends Controller
      */
     public function edit($id)
     {
-        //
+        $station = $this->repository->find($id);
+
+        return view('stations.edit', ['station' => $station]);
     }
 
     /**
@@ -69,9 +98,24 @@ class StationController extends Controller
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Request $request, $id)
+    public function update(StationFormRequest $request, $id)
     {
-        //
+        if ( ! $this->repository->update($id, $request->only('name'))) {
+            return ! $request->ajax() ? redirect()->route('stations.edit', $id)
+                                                  ->with('error', 'Unable to update station. Please try again.')
+                                      : response()->json([
+                                            'status'    => 0,
+                                            'message'   => 'Unable to update station. Please try again.',
+                                      ]);
+        }
+
+        return ! $request->ajax() ? redirect()->route('stations.show', $id)
+                                              ->with('success', 'Station successfully updated.')
+                                  : response()->json([
+                                        'status'    => 1,
+                                        'message'   => 'Station successfully updated.',
+                                        'redirect'  => route('stations.show', $id),
+                                  ]);
     }
 
     /**
