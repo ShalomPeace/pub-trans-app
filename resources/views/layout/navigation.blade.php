@@ -1,7 +1,7 @@
 <nav>
 	<ul>
 		<li>
-			<a href="">Stations</a>
+			<a href="{!! route('stations.index') !!}">Stations</a>
 		</li>
 		<li>
 			<a href="">Trains</a>
