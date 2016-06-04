@@ -2,9 +2,7 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
-
-class Train extends Model
+class Train extends BaseModel
 {
 	protected $guarded = ['id'];
 
@@ -16,5 +14,10 @@ class Train extends Model
     public function schedules()
     {
         return $this->hasMany(\App\Models\Schedule::class);
+    }
+
+    public function totalSeats()
+    {
+        return number_format($this->total_seats) . ' seats';
     }
 }
