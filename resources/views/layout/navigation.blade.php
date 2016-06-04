@@ -4,13 +4,13 @@
 			<a href="{!! route('stations.index') !!}">Stations</a>
 		</li>
 		<li>
-			<a href="">Trains</a>
+			<a href="{!! route('trains.index') !!}">Trains</a>
 		</li>
 		<li>
-			<a href="">Operators</a>
+			<a href="{!! route('operators.index) !!}">Operators</a>
 		</li>
 		<li>
-			<a href="">Schedules</a>
+			<a href="{!! route('schedules.index') !!}">Schedules</a>
 		</li>
 	</ul>
 </nav>
