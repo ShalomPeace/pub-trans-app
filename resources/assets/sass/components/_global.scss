@@ -1,0 +1,192 @@
+html, body, #wrapper {
+  width: 100%;
+  height: 100%;
+}
+
+img {
+	max-width: 100%;
+	height: auto;
+}
+
+select {
+  background-color: #ffffff;
+  height: 40px;
+}
+
+td, th {
+	padding: 8px 5px;
+	font-size: 14px;
+}
+
+table {
+	td {
+		img, img.avatar {
+			width: 40px;
+		}
+	}
+
+	td.action {
+		text-align: right;
+
+		a {
+			color: #aaa;
+
+			@include transition(color, 0.5s);
+
+			&:not(:last-child) {
+				margin-right: 5px;
+			}
+
+			&:hover {
+				color: #2196F3;
+			}
+		}
+	}
+}
+
+fieldset {
+	margin: 0;
+	border: none;
+}
+
+input:not([type]), input[type=text], input[type=password], input[type=email], input[type=url], input[type=time], input[type=date], input[type=datetime-local], input[type=tel], input[type=number], input[type=search], textarea.materialize-textarea {
+	margin-bottom: 20px;
+}
+
+[type="checkbox"] + label {
+	font-size: 12px;
+	padding-left: 25px;
+	height: 20px;
+	line-height: 20px;
+}
+
+[type="checkbox"] + label:before {
+	width: 16px;
+	height: 16px;
+}
+
+[type="checkbox"]:checked + label:before {
+    top: -2px;
+    left: -1px;
+    width: 8px;
+    height: 16px;
+}
+
+.row {
+	&.row-expand {
+		margin-left: -0.75rem;
+		margin-right: -0.75rem;
+	}
+
+	&.row-no-mb {
+		margin-bottom: 0 !important;
+	}
+}
+
+.avatar-sm {
+	width: 30px;
+}
+
+.btn {
+	&.btn-small {
+		font-size: 12px;
+		padding: 0 10px;
+		height: 30px;
+		line-height: 30px;
+	}
+
+	&.btn-success {
+		background-color: $success;
+	}
+
+	&.btn-info {
+		background: $info;
+	}
+
+	&.btn-danger {
+		background: $danger;
+	}
+
+	&.btn-warning {
+		background: $warning;
+	}
+
+	i.mdi {
+		margin-right: 10px;
+	}
+}
+
+.card .card-action a:not(.btn):not(.btn-large):not(.btn-large):not(.btn-floating) {
+  color: $info;
+}
+
+.status-active {
+  color: $success;
+}
+
+.status-delayed {
+  color: $warning;
+}
+
+.status-cancelled {
+  color: $danger;
+}
+
+.input-field {
+	margin-top: 0 !important;
+
+	label {
+		font-size: 14px;
+
+		&.active {
+			font-size: 12px;
+		}
+	}
+}
+
+.side-nav {
+	ul {
+		li {
+			&:hover {
+				background: none;
+			}
+		}
+	}
+}
+
+.widget {
+	background: #ffffff;
+	// min-height: 300px;
+	box-shadow: $box-shadow;
+
+	.widget-header {
+		height: 54px;
+		line-height: 54px;
+		border-bottom: 1px solid #d0d0d0;
+		padding: 0 20px;
+
+		.widget-title {
+			text-transform: uppercase;
+			font-size: 12px;
+			font-weight: $font-medium;
+			margin: 0 !important;
+			line-height: inherit !important;
+		}
+	}
+
+	.widget-body {
+		padding: 30px;
+	}
+
+	.widget-footer {
+		padding: 0 20px 20px;
+	}
+
+	.widget-header:after, 
+	.widget-body:after, 
+	.widget-footer:after {
+		content: "";
+	    display: table;
+	    clear: both;
+	}
+}

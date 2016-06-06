@@ -7,7 +7,7 @@
 			<a href="{!! route('trains.index') !!}">Trains</a>
 		</li>
 		<li>
-			<a href="{!! route('operators.index) !!}">Operators</a>
+			<a href="{!! route('operators.index') !!}">Operators</a>
 		</li>
 		<li>
 			<a href="{!! route('schedules.index') !!}">Schedules</a>

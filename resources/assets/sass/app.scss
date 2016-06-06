@@ -1,2 +1,38 @@
-// @import "node_modules/bootstrap-sass/assets/stylesheets/bootstrap";
+@import "../bower_components/Materialize/sass/materialize.scss";
 
+@import "components/variables";
+@import "components/prefixer";
+@import "components/global";
+@import "components/helpers";
+
+body {
+    background: url('../images/bg.jpg') no-repeat fixed center center;
+}
+
+header#page-header {
+  nav {
+    background-color: #424242;
+  }
+}
+
+#container {
+  min-height: calc(100% - 64px);
+  padding: 30px 0;
+}
+
+.schedules, .schedule {
+
+  &:not(:last-child) {
+    border-bottom: 1px solid #cccccc;
+  }
+  padding: 20px 0;
+
+    p {
+      margin: 0;
+
+      &.stations {
+        font-size: 20px;
+        margin-bottom: 10px;
+      }
+    }
+}
