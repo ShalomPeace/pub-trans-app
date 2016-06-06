@@ -33,5 +33,11 @@ Route::get('logout', [
 
 Route::resource('stations', 'StationController');
 Route::resource('trains', 'TrainController');
-Route::resource('operators', 'OperatoController');
+Route::resource('operators', 'OperatorController');
+
+Route::get('schedules/search', [
+    'as'    => 'schedules.search',
+    'uses'  => 'ScheduleController@search'
+]);
+
 Route::resource('schedules', 'ScheduleController');
