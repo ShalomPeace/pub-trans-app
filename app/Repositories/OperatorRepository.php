@@ -3,7 +3,7 @@
 namespace App\Repositories;
 
 use App\Models\Operator;
-use App\Repositories\OperatorRepositoryInterface;
+use App\Repositories\Contracts\OperatorRepositoryInterface;
 
 class OperatorRepository extends Repository implements OperatorRepositoryInterface
 {
