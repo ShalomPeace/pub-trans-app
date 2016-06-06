@@ -11,4 +11,13 @@ class ScheduleRepository extends Repository implements ScheduleRepositoryInterfa
     {
         $this->model = $model;
     }
+
+    public function search($from, $to)
+    {
+        $result = $this->model->where('departure_station_id', $from)
+                              ->where('arrival_station_id', $to)
+                              ->get();
+
+        return $result;
+    }
 }

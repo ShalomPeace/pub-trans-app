@@ -2,9 +2,9 @@
 
 namespace App\Models;
 
-use Illuminate\Database\Eloquent\Model;
+use DateTime;
 
-class Schedule extends Model
+class Schedule extends BaseModel
 {
     protected $guarded = ['id'];
 
@@ -15,21 +15,60 @@ class Schedule extends Model
 
     public function train()
     {
-        return $this->hasOne(\App\Models\Train::class);
+        return $this->belongsTo(\App\Models\Train::class);
     }
 
     public function departureStation()
     {
-        return $this->hasOne(\App\Models\Station::class, 'departure_station_id');
+        return $this->belongsTo(\App\Models\Station::class, 'departure_station_id');
     }
 
     public function arrivalStation()
     {
-        return $this->hasOne(\App\Models\Station::class, 'arrival_station_id');
+        return $this->belongsTo(\App\Models\Station::class, 'arrival_station_id');
     }
 
     public function operator()
     {
-        return $this->hasOne(\App\Models\Operator::class);
+        return $this->belongsTo(\App\Models\Operator::class);
+    }
+
+    public function departureDateTime($format = 'F j, Y @ H:i a')
+    {
+        return $this->dateTime($format, $this->departure_date, $this->departure_time);
+    }
+
+    public function arrivalDateTime($format = 'F j, Y @ H:i a')
+    {
+        return $this->dateTime($format, $this->arrival_date, $this->arrival_time);
+    }
+
+    public function dateTime($format, $date, $time)
+    {
+        return date($format, strtotime("{$date} {$time}"));
+    }
+
+    public function duration()
+    {
+        $interval = $this->calculateDuration();
+
+        $duration = '';
+
+        if ($interval->y) { $duration .= $interval->format("%y years "); }
+        if ($interval->m) { $duration .= $interval->format("%m months "); }
+        if ($interval->d) { $duration .= $interval->format("%d days "); }
+        if ($interval->h) { $duration .= $interval->format("%h hours "); }
+        if ($interval->i) { $duration .= $interval->format("%i minutes "); }
+        if ($interval->s) { $duration .= $interval->format("%s seconds "); }
+
+        return $duration;
+    }
+
+    private function calculateDuration()
+    {
+        $departure = new DateTime("{$this->departure_date} {$this->departure_time}");
+        $arrival   = new DateTime("{$this->arrival_date} {$this->arrival_time}");
+
+        return $departure->diff($arrival);
     }
 }

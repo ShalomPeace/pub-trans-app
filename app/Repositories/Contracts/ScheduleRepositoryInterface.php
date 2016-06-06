@@ -2,4 +2,7 @@
 
 namespace App\Repositories\Contracts;
 
-interface ScheduleRepositoryInterface {}
+interface ScheduleRepositoryInterface
+{
+    public function search($from, $to);
+}
