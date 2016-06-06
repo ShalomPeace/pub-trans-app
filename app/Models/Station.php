@@ -20,4 +20,14 @@ class Station extends BaseModel
     {
         return $this->hasMany(\App\Models\Schedule::class, 'arrival_station_id');
     }
+
+    public function totalSchedules()
+    {
+        $departure = $this->departureSchedules()->count();
+        $arrival   = $this->arrivalSchedules()->count();
+
+        $total = $departure + $arrival;
+
+        return $total;
+    }
 }
