@@ -76,6 +76,8 @@ class TrainController extends Controller
     {
         $train = $this->repository->find($id);
 
+        $train->load('schedules', 'schedules.departurestation', 'schedules.arrivalstation', 'schedules.train');
+
         return view('trains.show', ['train' => $train]);
     }
 

@@ -75,6 +75,8 @@ class OperatorController extends Controller
     {
         $operator = $this->repository->find($id);
 
+        $operator->load('schedules', 'schedules.departurestation', 'schedules.arrivalstation', 'schedules.train');
+
         return view('operators.show', ['operator' => $operator]);
     }
 
