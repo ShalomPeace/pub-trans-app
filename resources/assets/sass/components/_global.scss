@@ -154,6 +154,32 @@ input:not([type]), input[type=text], input[type=password], input[type=email], in
 	}
 }
 
+.dropdown-content {
+	li {
+		min-height: 20px;
+		line-height: 1rem;
+
+		& > a, & > span {
+			font-size: 12px;
+			line-height: 16px;
+			padding: 10px 12px;
+		}
+	}
+}
+
+.select-dropdown-box {
+	span.caret {
+		right: 10px;
+		z-index: 1;
+	}
+
+	input.select-dropdown {
+		background-color: #ffffff;
+		border: 1px solid #9e9e9e;
+		text-indent: 10px;
+	}
+}
+
 .widget {
 	background: #ffffff;
 	// min-height: 300px;

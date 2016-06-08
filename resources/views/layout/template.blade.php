@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="en">
+<html lang="en" ng-app="App">
 <head>
     <base href="{!! config('app.url') !!}"/>
 	<meta charset="UTF-8">
@@ -8,7 +8,7 @@
     <link rel="stylesheet" href="css/app.css"/>
 </head>
 <body>
-	<div id="wrapper">
+	<div id="wrapper" ng-cloak>
         @include('layout.header')
 		<div id="container" class="container">
             <section class="row">
@@ -19,5 +19,6 @@
 		</div>
 	</div>
     <script type="text/javascript" src="js/libs.min.js"></script>
+    <script type="text/javascript" src="js/app.min.js"></script>
 </body>
 </html>

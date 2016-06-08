@@ -6249,6 +6249,22 @@ input:not([type]), input[type=text], input[type=password], input[type=email], in
 .side-nav ul li:hover {
   background: none; }
 
+.dropdown-content li {
+  min-height: 20px;
+  line-height: 1rem; }
+  .dropdown-content li > a, .dropdown-content li > span {
+    font-size: 12px;
+    line-height: 16px;
+    padding: 10px 12px; }
+
+.select-dropdown-box span.caret {
+  right: 10px;
+  z-index: 1; }
+.select-dropdown-box input.select-dropdown {
+  background-color: #ffffff;
+  border: 1px solid #9e9e9e;
+  text-indent: 10px; }
+
 .widget {
   background: #ffffff;
   box-shadow: 0 1px 2px 0 rgba(0, 0, 0, 0.16), 0 1px 2px 0 rgba(0, 0, 0, 0.12); }
