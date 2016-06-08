@@ -41,3 +41,16 @@ Route::get('schedules/search', [
 ]);
 
 Route::resource('schedules', 'ScheduleController');
+
+Route::group(['prefix' => 'api/v1'], function() {
+	Route::resource('api.stations', 'StationController');
+	Route::resource('api.trains', 'TrainController');
+	Route::resource('api.operators', 'OperatorController');
+
+	Route::get('schedules/search', [
+	    'as'    => 'api.schedules.search',
+	    'uses'  => 'ScheduleController@search'
+	]);
+
+	Route::resource('api.schedules', 'ScheduleController');
+});
