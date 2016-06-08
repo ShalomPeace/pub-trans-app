@@ -25,8 +25,8 @@ class ScheduleController extends Controller
      */
     public function index(StationRepositoryInterface $stationRepository)
     {
-        $schedules = $this->repository->getAll();
-        $stations  = $stationRepository->getAll();
+        $schedules = $this->repository->getSchedules();
+        $stations  = $stationRepository->getForField();
 
         return view('schedules.index', [
             'schedules' => $schedules,
@@ -43,9 +43,9 @@ class ScheduleController extends Controller
                            TrainRepositoryInterface $trainRepository,
                            OperatorRepositoryInterface $operatorRepository)
     {
-        $stations  = $stationRepository->getAll();
-        $trains    = $trainRepository->getAll();
-        $operators = $operatorRepository->getAll();
+        $stations  = $stationRepository->getForField();
+        $trains    = $trainRepository->getForField();
+        $operators = $operatorRepository->getForField();
 
         return view('schedules.create', [
             'stations'  => $stations,
@@ -92,6 +92,8 @@ class ScheduleController extends Controller
     {
         $schedule = $this->repository->find($id);
 
+        $schedule = collect($schedule->formattedData());
+
         return view('schedules.show', ['schedule' => $schedule]);
     }
 
@@ -110,6 +112,8 @@ class ScheduleController extends Controller
         $trains    = $trainRepository->getAll();
         $operators = $operatorRepository->getAll();
         $schedule  = $this->repository->find($id);
+
+        $schedule->load('departurestation', 'arrivalstation', 'train', 'operator');
 
         return view('schedules.edit', [
             'stations'  => $stations,
@@ -160,17 +164,19 @@ class ScheduleController extends Controller
 
     public function search(Request $request, StationRepositoryInterface $stationRepository)
     {
-        $from = $request->input('from');
-        $to   = $request->input('to');
+        $departure = $request->input('departure');
+        $arrival   = $request->input('arrival');
 
-        $schedules = $this->repository->search($from, $to);
-        $stations  = $stationRepository->getAll();
+        $schedules = $this->repository->search($departure, $arrival);
+        $stations  = $stationRepository->getForField();
 
-        return view('schedules.index', [
-            'schedules' => $schedules,
-            'stations'  => $stations,
-            'from'      => $from,
-            'to'        => $to,
-        ]);
+        $data = [
+            'schedules'      => $schedules,
+            'stations'       => $stations,
+            'departure'      => $departure,
+            'arrival'        => $arrival,
+        ];
+
+        return ! $request->ajax() ? view('schedules.index', $data) : collect(array_only($data, 'schedules'))->toJson();
     }
 }

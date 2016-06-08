@@ -17,7 +17,7 @@ class HomeController extends Controller
      */
     public function index(StationRepositoryInterface $stationRepository)
     {
-        $stations = $stationRepository->getAll();
+        $stations = $stationRepository->getForField();
 
         return view('home.index', ['stations' => $stations]);
     }
