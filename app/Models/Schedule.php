@@ -71,4 +71,27 @@ class Schedule extends BaseModel
 
         return $departure->diff($arrival);
     }
+
+    public function formattedData() 
+    {
+        return [
+            'id'    => $this->id, 
+            'train' => $this->train->formattedData(), 
+            'departure'     => [
+                'station'   => $this->departureStation->formattedData(), 
+                'date'      => $this->departure_date, 
+                'time'      => $this->departure_time, 
+                'formatted_date_time'   => $this->departureDateTime(), 
+            ],
+            'arrival'     => [
+                'station'   => $this->arrivalStation->formattedData(), 
+                'date'      => $this->arrival_date, 
+                'time'      => $this->arrival_time, 
+                'formatted_date_time'   => $this->arrivalDateTime(), 
+            ],
+            'duration'      => $this->duration(),
+            'operator'  => $this->operator->formattedData(),
+            'timestamps'    => $this->getTimestamps(), 
+        ];
+    }
 }

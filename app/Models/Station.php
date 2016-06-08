@@ -30,4 +30,17 @@ class Station extends BaseModel
 
         return $total;
     }
+
+    public function formattedData() 
+    {
+        return [
+            'id'    => $this->id, 
+            'name'  => $this->name, 
+            'active'    => $this->active, 
+            'timestamps'    => [
+                'created_at'    => $this->created_at->toDateTimeString(), 
+                'updated_at'    => $this->created_at->toDateTimeString(),
+            ]
+        ];
+    }
 }
