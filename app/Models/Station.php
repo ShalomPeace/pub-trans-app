@@ -6,6 +6,8 @@ class Station extends BaseModel
 {
     protected $guarded = ['id'];
 
+    protected $optionFields = ['id', 'name'];
+
     public function user()
     {
         return $this->belongsTo(\App\Models\User::class);
