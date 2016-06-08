@@ -24,10 +24,10 @@ module.exports = function (grunt) {
                         'resources/assets/bower_components/angular/angular.min.js',
                     ], 
                     'public/js/app.js': [
-                        'resources/scripts/app.js',
-                        'resources/scripts/services/*.js',
-                        'resources/scripts/directives/*.js',
-                        'resources/scripts/controllers/*.js',
+                        'resources/assets/scripts/app.js',
+                        'resources/assets/scripts/services/*.js',
+                        'resources/assets/scripts/directives/*.js',
+                        'resources/assets/scripts/controllers/*.js',
                     ]
                 }
             }
@@ -46,4 +46,6 @@ module.exports = function (grunt) {
     grunt.loadNpmTasks('grunt-contrib-cssmin');
     grunt.loadNpmTasks('grunt-contrib-concat');
     grunt.loadNpmTasks('grunt-contrib-uglify');
+
+    grunt.registerTask('buildjs', ['concat', 'uglify']);
 };
