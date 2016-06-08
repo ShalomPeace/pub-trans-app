@@ -5,6 +5,8 @@ namespace App\Repositories;
 use App\Models\BaseModel as Model;
 use App\Repositories\Contracts\RepositoryInterface;
 
+use Illuminate\Database\Eloquent\Collection;
+
 abstract class Repository implements RepositoryInterface
 {
 	protected $model;
@@ -55,5 +57,25 @@ abstract class Repository implements RepositoryInterface
         $data['user_id'] = auth()->user()->id;
 
         return $data;
+    }
+
+    public function getForField() 
+    {
+        $data = $this->model->get($this->model->optionFields);
+
+        return ! $data->isEmpty() ? $data : [];
+    }
+
+    protected function getFormattedData(Collection $items) 
+    {
+        $data = [];
+
+        if ( ! $items->isEmpty()) {
+            foreach ($items as $item) {
+                $data[] = $item->formattedData();
+            }
+        }
+
+        return collect($data);
     }
 }
