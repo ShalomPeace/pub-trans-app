@@ -30,7 +30,11 @@
                                 </section>
                                 <section class="row row-no-mb">
                                     <fieldset class="col s12 input-field center">
-                                        <button type="submit" class="btn btn-success center@{{ loginForm.$invalid || loading ? ' disabled' : ''}}" ng-disabled="loginForm.$invalid || loading">Login</button>
+                                        <btn-submit ng-class="loginForm.$invalid || loading ? ' disabled' : ''"
+                                                    ng-disabled="loginForm.$invalid || loading" 
+                                                    ng-transclude>
+                                            Login
+                                        </btn-submit>
                                     </fieldset>
                                 </section>
                             </form>
