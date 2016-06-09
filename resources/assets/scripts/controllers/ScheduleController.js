@@ -1,25 +1,22 @@
 App.controller('ScheduleController',
 
-['$scope', 'ScheduleService', 
+['$scope', 'ScheduleFactory', 
 
-function($scope, ScheduleService) 
+function($scope, ScheduleFactory) 
 {
-	$scope.loader = false;
-
 	$scope.search = function(event) {
 		event.preventDefault();
-		event.stopPropagation();
 
-		$scope.loader = true;
+		$scope.loading = true;
 
-		ScheduleService.search($scope.form, function(data) {
-			$scope.loader = false;
+		ScheduleFactory.search($scope.form, function(data) {
+			$scope.loading = false;
 			$scope.schedules = data.schedules;
 		});
 	}
 
 	$scope.canSearch = function() {
-		return (! $scope.form.departure && ! $scope.form.arrival) || $scope.loader ? 'disabled' : '';
+		return (! $scope.form.departure && ! $scope.form.arrival) || $scope.loading ? 'disabled' : '';
 	};
 
 	$scope.getCurrentDate = function() {
