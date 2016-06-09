@@ -1,7 +1,7 @@
 <!DOCTYPE html>
 <html lang="en" ng-app="App">
 <head>
-    <base href="{!! config('app.url') !!}"/>
+    <base href="{!! route('index') !!}/"/>
 	<meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
 	<title>Public Transportation App (Train Scheduling)</title>
