@@ -68,4 +68,13 @@ class AuthController extends Controller
             'password' => bcrypt($data['password']),
         ]);
     }
+
+    public function authenticated($request, $user) 
+    {
+        return ! $request->ajax() ? redirect()->route('index')
+                                  : response()->json([
+                                        'status'    => 1, 
+                                        'message'   => 'Login successful! Redirecting...',
+                                    ]);
+    }
 }

@@ -5,6 +5,14 @@ App.config(['$httpProvider', function($httpProvider) {
 	$httpProvider.defaults.headers.post['X-CSRF-TOKEN'] 	  = angular.element('meta[name="_token"]').attr('content');
 	$httpProvider.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 }]);
+
+App.run(['$rootScope', function ($rootScope) {
+	$rootScope.baseUrl = angular.element('base').attr('href');
+
+	$rootScope.loading = false;
+
+	$rootScope.messages = [];
+}]);
 App.service('ApiService', ['$http', '$timeout', function ($http, $timeout) {
 	this.url = 'api/v1/';
 
@@ -43,6 +51,35 @@ App.service('ApiService', ['$http', '$timeout', function ($http, $timeout) {
 
 	return this;
 }])
+App.factory('AuthFactory', 
+
+['$rootScope', '$http', '$timeout',
+
+function ($rootScope, $http, $timeout) {
+	var baseUrl = $rootScope.baseUrl;
+
+	var auth = {};
+
+	auth.login = function(credentials, callback) {
+		var config = {
+			url : baseUrl + 'login/attempt', 
+			method: 'POST', 
+			data: $.param(credentials),
+		};
+
+		auth.request(config, callback);
+	};
+
+	auth.request = function(config, callback) {
+		$http(config).then(function(response) {
+			$timeout(function() {
+				callback(response);
+			}, 1000);
+		});
+	};
+
+	return auth;
+}]);
 App.service('ScheduleService', ['ApiService', function (ApiService) 
 {
 	this.search = function(data, callback) {
@@ -98,6 +135,44 @@ App.directive('preloaderCircle', [function () {
 		}
 	};
 }])
+App.controller('AuthController', 
+
+['$scope', '$timeout', 'AuthFactory', 
+
+function ($scope, $timeout, AuthFactory) {
+	$scope.form = {
+		username : '', 
+		password : '',
+	};
+	
+	$scope.login = function(event) {
+		event.preventDefault();
+
+		$scope.loading = true;
+		$scope.messages = [];
+		AuthFactory.login($scope.form, function(response) {
+			if (response.data.status) {
+				$scope.messages.push({
+					type: 'success', 
+					message: response.data.message,
+				});
+
+				$timeout(function() {
+					window.location = $scope.baseUrl;
+				}, 1000);
+			} else {
+				$scope.loading = false;
+
+				$scope.messages.push({
+					type: 'error', 
+					message: response.data.message,
+				});
+			}
+		});
+	};
+
+	window.scope = $scope;
+}])
 App.controller('HomeController',
 
 ['$scope',
@@ -133,5 +208,13 @@ function($scope, ScheduleService)
 		return new Date();
 	};
 
+	window.scope = $scope;
+}]);
+App.controller('StationController', 
+
+['$scope', 
+
+function ($scope) {
+	
 	window.scope = $scope;
 }]);
