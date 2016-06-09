@@ -11,4 +11,11 @@ class StationRepository extends Repository implements StationRepositoryInterface
     {
         $this->model = $model;
     }
+
+    public function getStationsWithSchedules() 
+    {
+    	return $this->model->active()
+    					   ->with('departureschedules', 'arrivalschedules')
+    					   ->get();
+    }
 }

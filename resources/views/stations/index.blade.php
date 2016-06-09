@@ -1,38 +1,38 @@
 @extends('layout.template')
 
 @section('content')
-    <section class="row">
-        <div class="col s12">
-            <a href="{!! route('stations.create') !!}" class="btn btn-small btn-info right">Add Station</a>
-        </div>
-    </section>
-    @if ( ! $stations->isEmpty())
-        @foreach ($stations->chunk(3) as $chunkStations)
-            <section class="row row-no-mb">
-                @foreach ($chunkStations as $station)
-                    <div class="col s4">
+    <div ng-controller="StationController">
+        <section class="row" ng-if="{{ auth()->check() }}">
+            <div class="col s12">
+                <a href="{!! route('stations.create') !!}" class="btn btn-small btn-info right">Add Station</a>
+            </div>
+        </section>
+        <section class="row" ng-init="chunkStations = {{ $stations->chunk(3) }}">
+            <div class="col s12">
+                <div class="row row-no-mb" ng-repeat="stations in chunkStations">
+                    <div class="col s4" ng-repeat="station in stations">
                         <section class="row row-no-mb">
                             <div class="col s12">
                                <div class="card">
                                    <div class="card-content">
-                                       <span class="card-title">{{ $station->name }}</span>
-                                       <p>{{ $station->totalSchedules() }} Schedule(s)</p>
+                                       <span class="card-title">@{{ station.name }}</span>
+                                       <p>@{{ station.departureschedules.length + station.arrivalschedules.length }} Schedule(s)</p>
                                        <br>
-                                       <p><strong>Departure:</strong> {{ $station->departureSchedules()->count() }}</p>
-                                       <p><strong>Arrival:</strong> {{ $station->arrivalSchedules()->count() }}</p>
+                                       <p><strong>Departure:</strong> @{{ station.departureschedules.length }}</p>
+                                       <p><strong>Arrival:</strong> @{{ station.arrivalschedules.length }}</p>
                                    </div>
                                    <div class="card-action">
-                                       <a href="{!! route('stations.show', $station) !!}">View</a>
+                                       <a href="sstations/@{{ station.id }}">View</a>
                                        @if (auth()->check())
-                                       <a href="{!! route('stations.edit', $station) !!}">Edit</a>
+                                       <a href="stations/@{{ station.id }}/edit">Edit</a>
                                        @endif
                                    </div>
                                </div>
                             </div>
                         </section>
                     </div>
-                @endforeach
-            </section>
-        @endforeach
-    @endif
+                </div>
+            </div>
+        </section>
+    </div>
 @endsection

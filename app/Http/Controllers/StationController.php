@@ -22,7 +22,7 @@ class StationController extends Controller
      */
     public function index()
     {
-        $stations = $this->repository->getAll(['departureschedules', 'arrivalschedules']);
+        $stations = $this->repository->getStationsWithSchedules();
 
         return view('stations.index', ['stations' => $stations]);
     }
