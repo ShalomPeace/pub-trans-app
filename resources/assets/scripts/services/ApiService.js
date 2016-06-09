@@ -1,5 +1,10 @@
-App.service('ApiService', ['$http', '$timeout', function ($http, $timeout) {
-	this.url = 'api/v1/';
+App.service('ApiService', 
+
+['$rootScope', '$http', '$timeout', 
+
+function ($rootScope, $http, $timeout) 
+{
+	this.url = $rootScope.baseUrl + 'api/v1/';
 
 	this.get = function(url, data, callback) {
 		this.request('GET', url, data, callback);
@@ -35,4 +40,4 @@ App.service('ApiService', ['$http', '$timeout', function ($http, $timeout) {
 	};
 
 	return this;
-}])
+}]);
