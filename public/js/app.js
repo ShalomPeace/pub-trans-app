@@ -6,15 +6,20 @@ App.config(['$httpProvider', function($httpProvider) {
 	$httpProvider.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 }]);
 
-App.run(['$rootScope', function ($rootScope) {
+App.run(['$rootScope', 'MessageFactory', function ($rootScope, MessageFactory) {
 	$rootScope.baseUrl = angular.element('base').attr('href');
 
 	$rootScope.loading = false;
 
-	$rootScope.messages = [];
+	$rootScope.messages = MessageFactory;
 }]);
-App.service('ApiService', ['$http', '$timeout', function ($http, $timeout) {
-	this.url = 'api/v1/';
+App.service('ApiService', 
+
+['$rootScope', '$http', '$timeout', 
+
+function ($rootScope, $http, $timeout) 
+{
+	this.url = $rootScope.baseUrl + 'api/v1/';
 
 	this.get = function(url, data, callback) {
 		this.request('GET', url, data, callback);
@@ -50,7 +55,7 @@ App.service('ApiService', ['$http', '$timeout', function ($http, $timeout) {
 	};
 
 	return this;
-}])
+}]);
 App.factory('AuthFactory', 
 
 ['$rootScope', '$http', '$timeout',
@@ -80,13 +85,46 @@ function ($rootScope, $http, $timeout) {
 
 	return auth;
 }]);
-App.service('ScheduleService', ['ApiService', function (ApiService) 
+App.factory('MessageFactory', [function () 
 {
-	this.search = function(data, callback) {
+	var service = {};
+
+	var messages = [];
+
+	service.add = function(type, message) {
+		messages.push({
+			type: type, 
+			message: message,
+		});
+	}
+
+	service.get = function() {
+		return messages;
+	}
+
+	service.clear = function() {
+		messages = [];	
+	};
+
+	return service;
+}]);
+App.service('ScheduleFactory', 
+
+['ApiService', 
+
+function (ApiService) 
+{
+	var schedule = {};
+
+	schedule.create = function(data, callback) {
+		ApiService.post('schedules', data, callback);	
+	};
+
+	schedule.search = function(data, callback) {
 		var response = ApiService.get('schedules/search', data, callback);
 	};
 
-	return this;
+	return schedule;
 }])
 App.directive('btnSubmit', [function () {
 	return {
@@ -182,26 +220,51 @@ function($scope) {
 }]);
 App.controller('ScheduleController',
 
-['$scope', 'ScheduleService', 
+['$scope', '$timeout', '$filter', 'ScheduleFactory', 
 
-function($scope, ScheduleService) 
+function($scope, $timeout, $filter, ScheduleFactory) 
 {
-	$scope.loader = false;
+	$scope.create = function(event) {
+		event.preventDefault();
+
+		$scope.loading = true;
+
+		var data = angular.copy($scope.form);
+
+		data.departure_date = $filter('date')(data.departure_date, 'yyyy-MM-dd');
+		data.arrival_date   = $filter('date')(data.arrival_date, 'yyyy-MM-dd');
+
+		data.departure_time = $filter('date')(data.departure_time, 'HH-mm-ss');
+		data.arrival_time = $filter('date')(data.arrival_time, 'HH-mm-ss');
+
+		ScheduleFactory.create($scope.form, function(response) {
+			if (response.status) {
+				$scope.messages.add('success', response.message);
+
+				$timeout(function() {
+					window.location = response.redirect;
+				}, 1000);
+			} else {
+				$scope.loading = false;
+
+				$scope.messages.add('error', response.message);
+			}
+		});
+	};
 
 	$scope.search = function(event) {
 		event.preventDefault();
-		event.stopPropagation();
 
-		$scope.loader = true;
+		$scope.loading = true;
 
-		ScheduleService.search($scope.form, function(data) {
-			$scope.loader = false;
+		ScheduleFactory.search($scope.form, function(data) {
+			$scope.loading = false;
 			$scope.schedules = data.schedules;
 		});
-	}
+	};
 
 	$scope.canSearch = function() {
-		return (! $scope.form.departure && ! $scope.form.arrival) || $scope.loader ? 'disabled' : '';
+		return (! $scope.form.departure && ! $scope.form.arrival) || $scope.loading ? 'disabled' : '';
 	};
 
 	$scope.getCurrentDate = function() {

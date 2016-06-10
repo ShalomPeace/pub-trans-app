@@ -6,10 +6,10 @@ App.config(['$httpProvider', function($httpProvider) {
 	$httpProvider.defaults.headers.common['X-Requested-With'] = 'XMLHttpRequest';
 }]);
 
-App.run(['$rootScope', function ($rootScope) {
+App.run(['$rootScope', 'MessageFactory', function ($rootScope, MessageFactory) {
 	$rootScope.baseUrl = angular.element('base').attr('href');
 
 	$rootScope.loading = false;
 
-	$rootScope.messages = [];
+	$rootScope.messages = MessageFactory;
 }]);

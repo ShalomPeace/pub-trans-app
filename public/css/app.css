@@ -6186,6 +6186,7 @@ fieldset {
     font-size: 12px;
     margin: 0; }
 
+.select-wrapper input.select-dropdown,
 input:not([type]), input[type=text], input[type=password], input[type=email], input[type=url], input[type=time], input[type=date], input[type=datetime-local], input[type=tel], input[type=number], input[type=search], textarea.materialize-textarea {
   margin-bottom: 10px; }
 
@@ -6292,6 +6293,9 @@ input:not([type]), input[type=text], input[type=password], input[type=email], in
     content: "";
     display: table;
     clear: both; }
+
+.select-wrapper + label {
+  font-size: 12px; }
 
 body {
   background: url("../images/bg.jpg") no-repeat fixed center center; }

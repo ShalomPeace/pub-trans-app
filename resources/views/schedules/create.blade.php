@@ -5,17 +5,25 @@
         <div class="col s12 l8 offset-l2">
             <section class="widget">
                 <main class="widget-body">
-                    <form action="{!! route('schedules.store') !!}" method="POST">
+                    <section class="row" ng-show="messages.get().length">
+                        <div class="col s12">
+                            <p ng-repeat="message in messages.get()" class="@{{ message.type }}-message center-align">@{{ message.message }}</p>
+                        </div>
+                    </section>
+                    <form action="{!! route('schedules.store') !!}" method="POST" name="schedule" ng-submit="create($event)" novalidate>
                         {!! csrf_field() !!}
                         <section class="row">
-                            <fieldset class="col s12" ng-init="departureStations = {{ $stations }}">
+                            <fieldset class="col s12 input-field" ng-init="departureStations = {{ $stations }}">
                                 <material-select ng-model="form.departure_station_id"
                                                  ng-init="form.departure_station_id = 0" 
                                                  name="departure_station_id" 
                                                  ng-options="station.id as station.name for station in departureStations track by station.id" 
+                                                 ng-required="true"  
                                                  ng-transclude>
-                                    <option value="">-- Departure Station --</option>
+                                    <option value="">-- Select Station --</option>
                                 </material-select>
+                                <label>Departure *</label>
+                                <p class="field-text error" ng-show="schedule.departure_station_id.$invalid || schedule.departure_station_id.$touched">Departure station is required</p>
                             </fieldset>
                         </section>
                         <section class="row">
@@ -23,59 +31,92 @@
                                 <input type="date" name="departure_date" 
                                                    min="@{{ getCurrentDate() | date:'yyyy-MM-dd' }}" 
                                                    ng-model="form.departure_date" 
-                                                   ng-init="form.departure_date = getCurrentDate() | date:'yyyy-MM-dd'"/>
-                                <label for="" class="active">Date</label>
+                                                   ng-init="form.departure_date = getCurrentDate() | date:'yyyy-MM-dd'" 
+                                                   ng-required="true"/>
+                                <label class="active">Date *</label>
+                                <div ng-show="schedule.departure_date.$touched">
+                                    <p class="field-text error" ng-show="schedule.departure_date.$error.required">Departure date is required</p>
+                                    <p class="field-text error" ng-show="schedule.departure_date.$error.date || schedule.departure_date.$error.min">Invalid departure date</p>
+                                </div>
                             </fieldset>
                             <fieldset class="col s12 m6 l6 input-field">
-                                <input type="time" name="departure_time" ng-model="form.departure_time"/>
-                                <label for="" class="active">Time</label>
+                                <input type="time" name="departure_time" ng-model="form.departure_time" ng-required="true"/>
+                                <label class="active">Time  *</label>
+                                <div ng-show="schedule.departure_time.$invalid && schedule.departure_time.$touched">
+                                    <p class="field-text error" ng-show="schedule.departure_time.$error.required">Departure time is required</p>
+                                    <p class="field-text error" ng-show="schedule.departure_time.$error.time">Invalid departure time</p>
+                                </div>
                             </fieldset>
                         </section>
                         <section class="row">
-                            <fieldset class="col s12" ng-init="arrivalStations = {{ $stations }}">
+                            <fieldset class="col s12 input-field" ng-init="arrivalStations = {{ $stations }}">
                                 <material-select ng-model="form.arrival_station_id" 
+                                                 ng-init="form.arrival_station_id = 0" 
                                                  name="arrival_station_id" 
                                                  ng-options="station.id as station.name for station in arrivalStations track by station.id" 
+                                                 ng-required="true" 
                                                  ng-transclude>
-                                    <option value="" selected>-- Arrival Station --</option>
+                                    <option value="" selected>-- Select Station --</option>
                                 </material-select>
+                                <label>Arrival</label>
+                                <p class="field-text error" ng-show="schedule.arrival_station_id.$error.required">Arrival station is required</p>
                             </fieldset>
                         </section>
                         <section class="row">
                             <fieldset class="col s6 input-field">
-                                <input type="date" name="arrival_date" min="@{{ form.departure_date | date:'yyyy-MM-dd' }}" ng-model="form.arrival_date"/>
-                                <label for="" class="active">Date</label>
+                                <input type="date" name="arrival_date" 
+                                                   min="@{{ form.departure_date | date:'yyyy-MM-dd' }}" 
+                                                   ng-model="form.arrival_date" 
+                                                   ng-init="form.arrival_date = form.departure_date" 
+                                                   ng-required="true"/>
+                                <label for="" class="active">Date *</label>
+                                <div ng-show="schedule.arrival_date.$touched">
+                                    <p class="field-text error" ng-show="schedule.arrival_date.$error.required">Arrival date is required</p>
+                                    <p class="field-text error" ng-show="schedule.arrival_date.$error.date || schedule.arrival_date.$error.min">Invalid arrival date</p>
+                                </div>
                             </fieldset>
                             <fieldset class="col s6 input-field">
-                                <input type="time" name="arrival_time" ng-model="form.arrival_time"/>
-                                <label for="" class="active">Time</label>
+                                <input type="time" name="arrival_time" ng-model="form.arrival_time" ng-required="true"/>
+                                <label for="" class="active">Time *</label>
+                                <div ng-show="schedule.arrival_time.$touched">
+                                    <p class="field-text error" ng-show="schedule.arrival_time.$error.required">Arrival time is required</p>
+                                    <p class="field-text error" ng-show="schedule.arrival_time.$error.time">Invalid arrival date</p>
+                                </div>
                             </fieldset>
                         </section>
                         <section class="row">
                             <fieldset class="col s12 l6 input-field" ng-init="trains = {{ $trains }}">
                                 <material-select name="train_id" 
                                                  ng-model="form.train_id" 
+                                                 ng-init="form.train_id = 0" 
                                                  ng-options="train.id as train.name for train in trains track by train.id" 
+                                                 ng-required="true" 
                                                  ng-transclude>
                                     <option value="" selected>-- Select Train --</option>
                                 </material-select>
-                                <label for="">Train</label>
+                                <label>Train *</label>
+                                <p class="field-text error" ng-show="schedule.train_id.$error.required">Train is required</p>
                             </fieldset>
                             <fieldset class="col s12 l6 input-field" ng-init="operators = {{ $operators }}">
                                 <material-select name="operator_id" 
                                                  ng-model="form.operator_id" 
+                                                 ng-init="form.operator_id = 0"
                                                  ng-options="operator.id as (operator.first_name + ' ' + operator.last_name) for operator in operators track by operator.id" 
+                                                 ng-required="true" 
                                                  ng-transclude>
                                     <option value="" selected>-- Select Operator --</option>
                                 </material-select>
-                                <label for="">Operator</label>
+                                <label>Operator *</label>
+                                <p class="field-text error" ng-show="schedule.operator_id.$error.required">Operator is required</p>
                             </fieldset>
                         </section>
                         <section class="row row-no-mb">
                             <fieldset class="col s12 input-field">
-                                <button class="btn btn-small btn-success right">
+                                <btn-submit class="right@{{ schedule.$invalid || loading ? ' disabled' : '' }}" 
+                                            ng-disabled="schedule.$invalid || loading" 
+                                            ng-transclude>
                                     Add
-                                </button>
+                                </btn-submit>
                             </fieldset>
                         </section>
                     </form>
