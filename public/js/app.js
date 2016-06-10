@@ -29,6 +29,14 @@ function ($rootScope, $http, $timeout)
 		this.request('POST', url, data, callback);
 	};
 
+	this.patch = function(url, data, callback) {
+		this.request('PATCH', url, data, callback);
+	};
+
+	this.put = function(url, data, callback) {
+		this.request('PUT', url, data, callback);
+	};
+
 	this.request = function(method, url, data, callback) {
 		var config = {
 			url : this.url + url, 
@@ -43,6 +51,10 @@ function ($rootScope, $http, $timeout)
 
 			case 'POST':
 			case 'post':
+			case 'PUT': 
+			case 'put': 
+			case 'PATCH': 
+			case 'patch':
 				config.data = $.param(data);
 			break;
 		}
@@ -118,6 +130,12 @@ function (ApiService)
 
 	schedule.create = function(data, callback) {
 		ApiService.post('schedules', data, callback);	
+	};
+
+	schedule.update = function(data, callback) {
+		data._method = 'PUT';
+
+		ApiService.post('schedules/' + data.id , data, callback);	
 	};
 
 	schedule.search = function(data, callback) {
@@ -229,15 +247,33 @@ function($scope, $timeout, $filter, ScheduleFactory)
 
 		$scope.loading = true;
 
-		var data = angular.copy($scope.form);
+		var data = $scope.filterDateTime($scope.form);
 
-		data.departure_date = $filter('date')(data.departure_date, 'yyyy-MM-dd');
-		data.arrival_date   = $filter('date')(data.arrival_date, 'yyyy-MM-dd');
+		ScheduleFactory.create(data, function(response) {
+			if (response.status) {
+				$scope.messages.add('success', response.message);
 
-		data.departure_time = $filter('date')(data.departure_time, 'HH-mm-ss');
-		data.arrival_time = $filter('date')(data.arrival_time, 'HH-mm-ss');
+				$timeout(function() {
+					window.location = response.redirect;
+				}, 1000);
+			} else {
+				$scope.loading = false;
 
-		ScheduleFactory.create($scope.form, function(response) {
+				$scope.messages.add('error', response.message);
+			}
+		});
+	};
+
+	$scope.update = function(event) {
+		event.preventDefault();
+
+		$scope.loading = true;
+
+		var data = $scope.filterDateTime($scope.form);
+
+		console.log(data);
+
+		ScheduleFactory.update(data, function(response) {
 			if (response.status) {
 				$scope.messages.add('success', response.message);
 
@@ -267,8 +303,26 @@ function($scope, $timeout, $filter, ScheduleFactory)
 		return (! $scope.form.departure && ! $scope.form.arrival) || $scope.loading ? 'disabled' : '';
 	};
 
-	$scope.getCurrentDate = function() {
-		return new Date();
+	$scope.getDateTime = function(date_time) {
+		return (typeof date_time !== 'undefined') ? new Date(date_time) : new Date();
+	};
+
+	$scope.getDataById = function(data, id) {
+		for(var key = 0; key < data.length; key++) {
+			if (data[key].id == id) return key;
+		}
+	};
+
+	$scope.filterDateTime = function(data) {
+		var copy = angular.copy(data);
+
+		copy.departure_date = $filter('date')(copy.departure_date, 'yyyy-MM-dd');
+		copy.arrival_date   = $filter('date')(copy.arrival_date, 'yyyy-MM-dd');
+
+		copy.departure_time = $filter('date')(copy.departure_time, 'HH:mm:ss');
+		copy.arrival_time = $filter('date')(copy.arrival_time, 'HH:mm:ss');
+	
+		return copy;
 	};
 
 	window.scope = $scope;

@@ -12,12 +12,12 @@ class ScheduleRepository extends Repository implements ScheduleRepositoryInterfa
         $this->model = $model;
     }
 
-    public function getSchedules() 
+    public function getLatestSchedules() 
     {
         $today = date('Y-m-d');
 
         $results = $this->model->where('departure_date', '>=', $today)
-                               ->orWhere('arrival_date', '<=', $today)
+                               ->orWhere('arrival_date', '>=', $today)
                                ->get();
 
         return $this->getFormattedData($results);
@@ -25,9 +25,17 @@ class ScheduleRepository extends Repository implements ScheduleRepositoryInterfa
 
     public function search($departure, $arrival)
     {
-        $results = $this->model->where('departure_station_id', $departure)
-                              ->orWhere('arrival_station_id', $arrival)
-                              ->get();
+        $query = $this->model;
+
+        if ($departure) {
+            $query = $query->where('departure_station_id', $departure);
+        }
+
+        if ($arrival) {
+            $query = $query->where('arrival_station_id', $arrival);
+        }
+
+        $results = $query->get();
 
         return $this->getFormattedData($results);
     }

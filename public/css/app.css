@@ -6220,13 +6220,13 @@ input:not([type]), input[type=text], input[type=password], input[type=email], in
   padding: 0 10px;
   height: 30px;
   line-height: 30px; }
-.btn.btn-success, .btn-success.btn-large {
+.btn.btn-success, .btn-success.btn-large, .btn.status-active, .status-active.btn-large {
   background-color: #4caf50; }
-.btn.btn-info, .btn-info.btn-large {
+.btn.btn-info, .btn-info.btn-large, .btn.status-departed, .status-departed.btn-large {
   background: #2196f3; }
-.btn.btn-danger, .btn-danger.btn-large {
+.btn.btn-danger, .btn-danger.btn-large, .btn.status-cancelled, .status-cancelled.btn-large {
   background: #f44336; }
-.btn.btn-warning, .btn-warning.btn-large {
+.btn.btn-warning, .btn-warning.btn-large, .btn.status-delayed, .status-delayed.btn-large {
   background: #ff5722; }
 .btn i.mdi, .btn-large i.mdi {
   margin-right: 10px; }
@@ -6234,13 +6234,17 @@ input:not([type]), input[type=text], input[type=password], input[type=email], in
 .card .card-action a:not(.btn):not(.btn-large):not(.btn-large):not(.btn-large):not(.btn-floating) {
   color: #2196f3; }
 
-.status-active {
+.status-text-active,
+.status-text-arrived {
   color: #4caf50; }
 
-.status-delayed {
+.status-text-departed {
+  color: #2196f3; }
+
+.status-text-delayed {
   color: #ff5722; }
 
-.status-cancelled {
+.status-text-cancelled {
   color: #f44336; }
 
 .input-field {
@@ -6296,6 +6300,9 @@ input:not([type]), input[type=text], input[type=password], input[type=email], in
 
 .select-wrapper + label {
   font-size: 12px; }
+
+[ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
+  display: none !important; }
 
 body {
   background: url("../images/bg.jpg") no-repeat fixed center center; }

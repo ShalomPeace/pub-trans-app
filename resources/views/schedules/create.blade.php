@@ -12,6 +12,7 @@
                     </section>
                     <form action="{!! route('schedules.store') !!}" method="POST" name="schedule" ng-submit="create($event)" novalidate>
                         {!! csrf_field() !!}
+                        <input type="hidden" ng-model="form.status" ng-init="form.status = 'Active'">
                         <section class="row">
                             <fieldset class="col s12 input-field" ng-init="departureStations = {{ $stations }}">
                                 <material-select ng-model="form.departure_station_id"
@@ -29,9 +30,10 @@
                         <section class="row">
                             <fieldset class="col s12 m6 l6 input-field">
                                 <input type="date" name="departure_date" 
-                                                   min="@{{ getCurrentDate() | date:'yyyy-MM-dd' }}" 
+                                                   min="@{{ getDateTime() | date:'yyyy-MM-dd' }}" 
                                                    ng-model="form.departure_date" 
-                                                   ng-init="form.departure_date = getCurrentDate() | date:'yyyy-MM-dd'" 
+                                                   ng-init="form.departure_date = getDateTime()" 
+                                                   ng-change="form.arrival_date = form.departure_date" 
                                                    ng-required="true"/>
                                 <label class="active">Date *</label>
                                 <div ng-show="schedule.departure_date.$touched">

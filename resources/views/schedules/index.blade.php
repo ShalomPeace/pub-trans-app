@@ -17,7 +17,7 @@
                                     <fieldset class="col s4 input-field" ng-init="departureStations = stations">
                                         <material-select name="departure" 
                                                          ng-model="form.departure" 
-                                                         ng-options="station.id as station.name for station in departureStations track by station.id" 
+                                                         ng-options="station.id as station.name for station in departureStations" 
                                                          ng-init="form.departure = {{ $departure or 0 }}" 
                                                          ng-transclude>
                                             <option value="">-- Departure --</option>
@@ -26,7 +26,7 @@
                                     <fieldset class="col s4 input-field" ng-init="arrivalStations = stations">
                                         <material-select name="arrival" 
                                                          ng-model="form.arrival" 
-                                                         ng-options="station.id as station.name for station in arrivalStations track by station.id" 
+                                                         ng-options="station.id as station.name for station in arrivalStations" 
                                                          ng-init="form.arrival = {{ $arrival or 0 }}" 
                                                          ng-transclude>
                                             <option value="" selected>-- Arrival --</option>
@@ -48,10 +48,10 @@
                     </section>
                     <section class="row">
                         <div class="col s12">
-                            <section ng-show="loader" class="center">
+                            <section ng-show="loading" class="center">
                                 <preloader-circle></preloader-circle>
                             </section>
-                            <section ng-init="schedules = {{ $schedules}}" ng-show="schedules.length && ! loader">
+                            <section ng-init="schedules = {{ $schedules}}" ng-show="schedules.length && ! loading">
                                 <article class="schedules" ng-repeat="schedule in schedules">
                                     <aside class="right">
                                         <a href="schedules/@{{ schedule.id }} " class="btn btn-small btn-info">View</a>
@@ -67,7 +67,7 @@
                                     <p><strong>Status:</strong> <span class="status-@{{ schedule.status || 'active' }}">@{{ schedule.status || 'Active' }}</span></p>
                                 </article>
                             </section>
-                            <section ng-show="! schedules.length && ! loader" class="center">
+                            <section ng-show="! schedules.length && ! loading" class="center">
                                 <p>No schedules found.</p>
                             </section>
                         </div>

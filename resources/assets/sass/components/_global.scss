@@ -107,19 +107,19 @@ input:not([type]), input[type=text], input[type=password], input[type=email], in
 		line-height: 30px;
 	}
 
-	&.btn-success {
+	&.btn-success, &.status-active {
 		background-color: $success;
 	}
 
-	&.btn-info {
+	&.btn-info, &.status-departed {
 		background: $info;
 	}
 
-	&.btn-danger {
+	&.btn-danger, &.status-cancelled {
 		background: $danger;
 	}
 
-	&.btn-warning {
+	&.btn-warning, &.status-delayed {
 		background: $warning;
 	}
 
@@ -132,15 +132,20 @@ input:not([type]), input[type=text], input[type=password], input[type=email], in
   color: $info;
 }
 
-.status-active {
+.status-text-active, 
+.status-text-arrived {
   color: $success;
 }
 
-.status-delayed {
+.status-text-departed {
+	color: $info;
+}
+
+.status-text-delayed {
   color: $warning;
 }
 
-.status-cancelled {
+.status-text-cancelled {
   color: $danger;
 }
 
@@ -241,4 +246,8 @@ p {
 
 .select-wrapper + label {
 	font-size: 12px;
+}
+
+[ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
+  display: none !important;
 }

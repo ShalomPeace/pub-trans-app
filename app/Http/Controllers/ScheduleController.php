@@ -25,7 +25,7 @@ class ScheduleController extends Controller
      */
     public function index(StationRepositoryInterface $stationRepository)
     {
-        $schedules = $this->repository->getSchedules();
+        $schedules = $this->repository->getLatestSchedules();
         $stations  = $stationRepository->getForField();
 
         return view('schedules.index', [
@@ -108,19 +108,21 @@ class ScheduleController extends Controller
                          OperatorRepositoryInterface $operatorRepository,
                          $id)
     {
-        $stations  = $stationRepository->getAll();
-        $trains    = $trainRepository->getAll();
-        $operators = $operatorRepository->getAll();
+        $stations  = $stationRepository->getForField();
+        $trains    = $trainRepository->getForField();
+        $operators = $operatorRepository->getForField();
         $schedule  = $this->repository->find($id);
 
         $schedule->load('departurestation', 'arrivalstation', 'train', 'operator');
 
-        return view('schedules.edit', [
+        $data = [
             'stations'  => $stations,
             'trains'    => $trains,
             'operators' => $operators,
             'schedule'  => $schedule,
-        ]);
+        ];
+
+        return view('schedules.edit', $data);
     }
 
     /**

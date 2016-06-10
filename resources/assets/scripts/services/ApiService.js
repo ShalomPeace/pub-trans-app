@@ -14,6 +14,14 @@ function ($rootScope, $http, $timeout)
 		this.request('POST', url, data, callback);
 	};
 
+	this.patch = function(url, data, callback) {
+		this.request('PATCH', url, data, callback);
+	};
+
+	this.put = function(url, data, callback) {
+		this.request('PUT', url, data, callback);
+	};
+
 	this.request = function(method, url, data, callback) {
 		var config = {
 			url : this.url + url, 
@@ -28,6 +36,10 @@ function ($rootScope, $http, $timeout)
 
 			case 'POST':
 			case 'post':
+			case 'PUT': 
+			case 'put': 
+			case 'PATCH': 
+			case 'patch':
 				config.data = $.param(data);
 			break;
 		}
