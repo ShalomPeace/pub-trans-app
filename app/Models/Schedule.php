@@ -89,7 +89,8 @@ class Schedule extends BaseModel
                 'time'      => $this->arrival_time, 
                 'formatted_date_time'   => $this->arrivalDateTime(), 
             ],
-            'duration'      => $this->duration(),
+            'duration'      => $this->duration(), 
+            'status'        => $this->status,
             'operator'  => $this->operator->formattedData(),
             'timestamps'    => $this->getTimestamps(), 
         ];

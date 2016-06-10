@@ -6,7 +6,7 @@ class Operator extends BaseModel
 {
     protected $guarded = ['id'];
 
-    protected $optionFields = ['id', 'first_name', 'last_name'];
+    public $optionFields = ['id', 'first_name', 'last_name'];
 
     public function user()
     {

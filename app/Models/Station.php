@@ -6,7 +6,7 @@ class Station extends BaseModel
 {
     protected $guarded = ['id'];
 
-    protected $optionFields = ['id', 'name'];
+    public $optionFields = ['id', 'name'];
 
     public function user()
     {
