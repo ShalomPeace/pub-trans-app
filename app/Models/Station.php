@@ -8,10 +8,7 @@ class Station extends BaseModel
 
     public $optionFields = ['id', 'name'];
 
-    protected $appends = [
-        'total_schedule', 
-        'route'
-    ];
+    protected $appends = ['total_schedule', 'route'];
 
     public function user()
     {
@@ -26,17 +23,6 @@ class Station extends BaseModel
     public function arrival_schedules()
     {
         return $this->hasMany(\App\Models\Schedule::class, 'arrival_station_id');
-    }
-
-    public function getRouteAttribute() 
-    {
-        $routes = [
-            'show'      => route('stations.show', $this), 
-            'edit'      => route('stations.edit', $this), 
-            'update'    => route('stations.update', $this),
-        ];
-
-        return $this->attributes['routes'] = $routes;
     }
 
     public function getTotalScheduleAttribute()

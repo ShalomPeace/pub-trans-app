@@ -8,7 +8,7 @@ class Train extends BaseModel
 
     public $optionFields = ['id', 'name'];
 
-    protected $appends = ['total_seats'];
+    protected $appends = ['total_seats', 'route'];
 
     public function user()
     {

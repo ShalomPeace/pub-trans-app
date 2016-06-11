@@ -8,7 +8,7 @@ class Operator extends BaseModel
 
     public $optionFields = ['id', 'first_name', 'last_name'];
 
-    protected $appends = ['full_name'];
+    protected $appends = ['full_name', 'route'];
 
     public function user()
     {

@@ -66,17 +66,6 @@ class Schedule extends BaseModel
         return $this->attributes['duration'] = $duration;
     }
 
-    public function getRouteAttribute() 
-    {
-        $routes = [
-            'show'      => route('schedules.show', $this), 
-            'edit'      => route('schedules.edit', $this), 
-            'update'    => route('schedules.update', $this),
-        ];
-
-        return $this->attributes['routes'] = $routes;
-    }
-
     public function dateTime($date, $time)
     {
         return date('F j, Y @ H:i a', strtotime("{$date} {$time}"));
