@@ -27,8 +27,8 @@ class Station extends BaseModel
 
     public function getTotalScheduleAttribute()
     {
-        $departure = $this->departureSchedules()->count();
-        $arrival   = $this->arrivalSchedules()->count();
+        $departure = $this->departure_schedules->count();
+        $arrival   = $this->arrival_schedules->count();
 
         $total = $departure + $arrival;
 
