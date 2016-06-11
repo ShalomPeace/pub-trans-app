@@ -1,22 +1,34 @@
 @extends('layout.template')
 
 @section('content')
-    <section class="row">
+    <section class="row" ng-controller="StationController">
         <div class="col s12 l6 offset-l3">
             <section class="widget">
                 <main class="widget-body">
-                    <form action="{!! route('stations.update', $station)!!} " method="POST">
+                    @include('../partials.messages')
+                    <form action="{!! route('stations.update', $station)!!} " method="POST" name="station" ng-submit="submit($event, 'update')" autocomplete="off">
                         {!! csrf_field() !!}
-                        <input type="hidden" name="_method" value="PATCH"/>
+                        <input type="hidden" ng-model="form._method" 
+                                             name="_method" 
+                                             ng-init="form._method = 'PUT'" 
+                                             value="PUT"/>
+                        <input type="hidden" ng-init="form.id = {{ $station->id }}">
                         <section class="row">
                             <fieldset class="col s12 input-field">
-                                <label for="name">Station Name</label>
-                                <input type="text" name="name" id="name" value="{{ $station->name }}"/>
+                                <input type="text" ng-model="form.name" 
+                                                   ng-init="form.name = '{{ $station->name }}'" 
+                                                   name="name"/>
+                                <label>Station Name</label>
+                                <p class="field-text error" ng-show="station.name.$error.required && station.name.$touched">Station name is required</p>
                             </fieldset>
                         </section>
                         <section class="row row-no-mb">
                             <fieldset class="col s12 input-field">
-                                <button type="submit" class="btn btn-small btn-success right">Save</button>
+                                <btn-submit class="right" ng-class="station.$invalid || loading ? 'disabled' : ''" 
+                                                          ng-disabled="@{{ station.$invalid || loading }}" 
+                                                          ng-transclude>
+                                    Save
+                                </btn-submit>
                             </fieldset>
                         </section>
                     </form>

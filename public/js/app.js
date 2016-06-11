@@ -144,6 +144,23 @@ function (ApiService)
 
 	return schedule;
 }])
+App.factory('StationFactory', 
+
+['ApiService', 
+
+function (ApiService) {
+	var station = {};
+
+	station.create = function(data, callback) {
+		ApiService.post('stations', data, callback);	
+	};
+
+	station.update = function(data, callback) {
+		ApiService.post('stations/' + data.id, data, callback);
+	};
+
+	return station;
+}]);
 App.directive('btnSubmit', [function () {
 	return {
 		template: '<button type="submit" class="btn btn-success waves-effect waves-light"></button>',
@@ -329,9 +346,31 @@ function($scope, $timeout, $filter, ScheduleFactory)
 }]);
 App.controller('StationController', 
 
-['$scope', 
+['$scope', '$timeout', 'StationFactory', 
 
-function ($scope) {
+function ($scope, $timeout, StationFactory) 
+{
+	$scope.submit = function(event, type) {
+		event.preventDefault();
+
+		$scope.loading = true;
+
+		var method = StationFactory[type];
+
+		method($scope.form, function(response) {
+			if (response.status) {
+				$scope.messages.add('success', response.message);
+			
+				$timeout(function() {
+					window.location = response.redirect;
+				}, 1000);
+			} else {
+				$scope.loading = false;
+
+				$scope.messages.add('error', response.message);
+			}
+		});
+	};
 	
 	window.scope = $scope;
 }]);

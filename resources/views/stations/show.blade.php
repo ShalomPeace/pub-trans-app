@@ -1,14 +1,12 @@
 @extends('layout.template')
 
 @section('content')
-    <section class="row">
+    <section class="row" ng-controller="StationController">
         <div class="col s12">
-            <section class="widget">
+            <section class="widget" ng-init="station = {{ $station }}">
                 <main class="widget-body">
-                    @if (auth()->check())
-                        <a href="{!! route('stations.edit', $station) !!}" class="btn btn-small btn-success right">Edit Station</a>
-                    @endif
-                    <h5>{{ $station->name }}</h5>
+                    <btn-link href="@{{ station.route.edit }}" class="btn-small right" ng-if="{{ auth()->check() }}">Edit Station</btn-link>
+                    <h5>@{{ station.name }}</h5>
                     <p>Departures</p>
                     <table>
                         <thead>
@@ -18,36 +16,28 @@
                                 <th>Arrival</th>
                                 <th>Duration</th>
                                 <th>Train</th>
-                                @if (auth()->check())
-                                <th>Operator</th>
-                                @endif
+                                <th ng-if="{{ auth()->check() }}">Operator</th>
                                 <th>Status</th>
                                 <th>&nbsp;</th>
                             </tr>
                         </thead>
                         <tbody>
-                            @if ( ! $station->departureSchedules->isEmpty())
-                                @foreach ($station->departureSchedules as $departure)
-                                    <tr>
-                                        <td>{{ $departure->arrivalStation->name }}</td>
-                                        <td>{{ $departure->departureDateTime() }}</td>
-                                        <td>{{ $departure->arrivalDateTime() }}</td>
-                                        <td>{{ $departure->duration() }}</td>
-                                        <td>{{ $departure->train->code }}</td>
-                                        <td>{{ $departure->operator->name() }}</td>
-                                        <td class="status-active">Active</td>
-                                        <td>
-                                            @if (auth()->check())
-                                                <a href="{!! route('schedules.edit', $departure) !!}">Edit</a>
-                                            @endif
-                                        </td>
-                                    </tr>
-                                @endforeach
-                            @else
-                                <tr>
-                                    <td colspan="7" class="center">No departures found</td>
-                                </tr>
-                            @endif
+                            <tr ng-if="station.departure_schedules.length" ng-repeat="departure in station.departure_schedules">
+                                <td>@{{ departure.arrival_station.name }}</td>
+                                <td>@{{ departure.departure_date_time }}</td>
+                                <td>@{{ departure.arrival_date_time }}</td>
+                                <td>@{{ departure.duration }}</td>
+                                <td>@{{ departure.train.name }}</td>
+                                <td>@{{ departure.operator.full_name }}</td>
+                                <td class="status-text-@{{ departure.status.toLowerCase() }}">@{{ departure.status }}</td>
+                                <td>
+                                    <a href="@{{ departure.route.show }}">View</a>
+                                    <a href="@{{ departure.route.edit }}" ng-if="{{ auth()->check() }}">Edit</a>
+                                </td>
+                            </tr>
+                            <tr ng-if=" ! station.departure_schedules.length">
+                                <td class="center" colspan="{{ auth()->check() ? 8 : 7 }}">No schedules found.</td>
+                            </tr>
                         </tbody>
                     </table>
                     <br/><br/>
@@ -60,36 +50,28 @@
                             <th>Arrival</th>
                             <th>Duration</th>
                             <th>Train</th>
-                            @if (auth()->check())
-                                <th>Operator</th>
-                            @endif
+                            <th ng-if="{{ auth()->check() }}">Operator</th>
                             <th>Status</th>
                             <th>&nbsp;</th>
                         </tr>
                         </thead>
                         <tbody>
-                        @if ( ! $station->arrivalSchedules->isEmpty())
-                            @foreach ($station->arrivalSchedules as $arrival)
-                                <tr>
-                                    <td>{{ $arrival->departureStation->name }}</td>
-                                    <td>{{ $arrival->departureDateTime() }}</td>
-                                    <td>{{ $arrival->arrivalDateTime() }}</td>
-                                    <td>{{ $arrival->duration() }}</td>
-                                    <td>{{ $arrival->train->code }}</td>
-                                    <td>{{ $arrival->operator->name() }}</td>
-                                    <td class="status-active">Active</td>
-                                    <td>
-                                        @if (auth()->check())
-                                            <a href="{!! route('schedules.edit', $arrival) !!}">Edit</a>
-                                        @endif
-                                    </td>
-                                </tr>
-                            @endforeach
-                        @else
-                            <tr>
-                                <td colspan="7" class="center">No arrivals found</td>
+                            <tr ng-if="station.arrival_schedules.length" ng-repeat="departure in station.arrival_schedules">
+                                <td>@{{ departure.arrival_station.name }}</td>
+                                <td>@{{ departure.departure_date_time }}</td>
+                                <td>@{{ departure.arrival_date_time }}</td>
+                                <td>@{{ departure.duration }}</td>
+                                <td>@{{ departure.train.name }}</td>
+                                <td>@{{ departure.operator.full_name }}</td>
+                                <td class="status-text-@{{ departure.status.toLowerCase() }}">@{{ departure.status }}</td>
+                                <td>
+                                    <a href="@{{ departure.route.show }}">View</a>
+                                    <a href="@{{ departure.route.edit }}" ng-if="{{ auth()->check() }}">Edit</a>
+                                </td>
                             </tr>
-                        @endif
+                            <tr ng-if=" ! station.arrival_schedules.length">
+                                <td class="center" colspan="{{ auth()->check() ? 8 : 7 }}">No schedules found.</td>
+                            </tr>
                         </tbody>
                     </table>
                 </main>

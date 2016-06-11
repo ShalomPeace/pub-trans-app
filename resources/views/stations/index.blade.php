@@ -16,15 +16,15 @@
                                <div class="card">
                                    <div class="card-content">
                                        <span class="card-title">@{{ station.name }}</span>
-                                       <p>@{{ station.departureschedules.length + station.arrivalschedules.length }} Schedule(s)</p>
+                                       <p>@{{ station.total_schedule }} Schedule(s)</p>
                                        <br>
-                                       <p><strong>Departure:</strong> @{{ station.departureschedules.length }}</p>
-                                       <p><strong>Arrival:</strong> @{{ station.arrivalschedules.length }}</p>
+                                       <p><strong>Departure:</strong> @{{ station.departure_schedules.length }}</p>
+                                       <p><strong>Arrival:</strong> @{{ station.arrival_schedules.length }}</p>
                                    </div>
                                    <div class="card-action">
-                                       <a href="sstations/@{{ station.id }}">View</a>
+                                       <a href="@{{ station.route.show }}">View</a>
                                        @if (auth()->check())
-                                       <a href="stations/@{{ station.id }}/edit">Edit</a>
+                                       <a href="@{{ station.route.edit }}">Edit</a>
                                        @endif
                                    </div>
                                </div>
