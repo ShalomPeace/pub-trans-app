@@ -23,7 +23,7 @@ class TrainController extends Controller
      */
     public function index()
     {
-        $trains = $this->repository->getAll();
+        $trains = $this->repository->getTrainList();
 
         return view('trains.index', ['trains' => $trains]);
     }
@@ -35,7 +35,9 @@ class TrainController extends Controller
      */
     public function create()
     {
-        return view('trains.create');
+        $code = $this->repository->getNextCode();
+
+        return view('trains.create', ['code' => $code]);
     }
 
     /**
@@ -74,9 +76,7 @@ class TrainController extends Controller
      */
     public function show($id)
     {
-        $train = $this->repository->find($id);
-
-        $train->load('schedules', 'schedules.departurestation', 'schedules.arrivalstation', 'schedules.train');
+        $train = $this->repository->getTrainWithSchedules($id);
 
         return view('trains.show', ['train' => $train]);
     }
