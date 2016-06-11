@@ -16,11 +16,9 @@ class ScheduleRepository extends Repository implements ScheduleRepositoryInterfa
     {
         $today = date('Y-m-d');
 
-        $results = $this->model->where('departure_date', '>=', $today)
-                               ->orWhere('arrival_date', '>=', $today)
+        return $this->model->where('departure_date', '>=', $today)
+                           ->orWhere('arrival_date', '>=', $today)
                                ->get();
-
-        return $this->getFormattedData($results);
     }
 
     public function search($departure, $arrival)
