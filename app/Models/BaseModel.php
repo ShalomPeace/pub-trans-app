@@ -22,6 +22,11 @@ class BaseModel extends Model
         return $this->boundToUser;
     }
 
+    public function getCreatedAtAttribute($value) 
+    {
+        return date('F j, Y', strtotime($value));
+    }
+
     public function getRouteAttribute() 
     {
         $route = $this->getRouteName();
