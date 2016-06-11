@@ -2,4 +2,11 @@
 
 namespace App\Repositories\Contracts;
 
-interface TrainRepositoryInterface {}
+interface TrainRepositoryInterface 
+{
+	public function getTrainList();
+
+	public function getTrainWithSchedules($id);
+
+	public function getNextCode();
+}
