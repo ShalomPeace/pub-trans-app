@@ -15,7 +15,17 @@ class StationRepository extends Repository implements StationRepositoryInterface
     public function getStationsWithSchedules() 
     {
     	return $this->model->active()
-    					   ->with('departureschedules', 'arrivalschedules')
+    					   ->with('departure_schedules', 'arrival_schedules')
     					   ->get();
+    }
+
+    public function getStationWithSchedules($id) 
+    {
+        $station = $this->find($id);
+
+        $station->load('departure_schedules', 'departure_schedules.arrival_station', 'departure_schedules.train', 'departure_schedules.operator');
+        $station->load('arrival_schedules', 'arrival_schedules.arrival_station', 'arrival_schedules.train', 'arrival_schedules.operator');
+
+        return $station;
     }
 }

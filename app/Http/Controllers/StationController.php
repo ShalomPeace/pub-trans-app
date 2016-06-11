@@ -73,10 +73,7 @@ class StationController extends Controller
      */
     public function show($id)
     {
-        $station = $this->repository->find($id);
-
-        $station->load('departureschedules', 'departureschedules.arrivalstation', 'departureschedules.train');
-        $station->load('arrivalschedules', 'arrivalschedules.arrivalstation', 'arrivalschedules.train');
+        $station = $this->repository->getStationWithSchedules($id);
 
         return view('stations.show', ['station' => $station]);
     }
