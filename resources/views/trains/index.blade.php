@@ -1,9 +1,9 @@
 @extends('layout.template')
 
 @section('content')
-    <section class="row">
+    <section class="row" ng-controller="TrainController">
         <div class="col s12 l8 offset-l2">
-            <section class="widget">
+            <section class="widget" ng-init="trains = {{ $trains }}">
                 <main class="widget-body">
                     <section class="row">
                         <div class="col s12">
@@ -16,29 +16,24 @@
                                 <th>Code</th>
                                 <th>Name</th>
                                 <th>Total Seats</th>
-                                <th>Date Added</th>
+                                <th ng-if="{{ auth()->check() }}">Date Added</th>
                                 <th>&nbsp;</th>
                             </tr>
                         </thead>
                         <tbody>
-                            @if ( ! $trains->isEmpty())
-                                @foreach ($trains as $train)
-                                    <tr>
-                                        <td>{{ $train->code }}</td>
-                                        <td>{{ $train->name }}</td>
-                                        <td>{{ $train->totalSeats() }}</td>
-                                        <td>{{ $train->created_at->format('F j, Y') }}</td>
-                                        <td class="right-align">
-                                            <a href="{!! route('trains.show', $train) !!}">View</a>
-                                            <a href="{!! route('trains.edit', $train) !!}">Edit</a>
-                                        </td>
-                                    </tr>
-                                @endforeach
-                            @else
-                                <tr>
-                                    <td colspan="6" align="center">No train found.</td>
-                                </tr>
-                            @endif
+                            <tr ng-if="trains.length" ng-repeat="train in trains">
+                                <td>@{{ train.code }}</td>
+                                <td>@{{ train.name }}</td>
+                                <td>@{{ train.total_seats_text }}</td>
+                                <td ng-if="{{ auth()->check() }}">@{{ train.created_at }}</td>
+                                <td class="right-align">
+                                    <a href="@{{ train.route.show }}">View</a>
+                                    <a href="@{{ train.route.edit }}" ng-if="{{ auth()->check() }}">Edit</a>
+                                </td>
+                            </tr>
+                            <tr ng-if=" ! trains.length">
+                                <td class="center" colspan="{{ auth()->check() ? 5 : 4 }}">No trains found.</td>
+                            </tr>
                         </tbody>
                     </table>
                 </main>
