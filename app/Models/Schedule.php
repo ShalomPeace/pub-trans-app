@@ -8,6 +8,13 @@ class Schedule extends BaseModel
 {
     protected $guarded = ['id'];
 
+    protected $appends = [
+        'duration', 
+        'departure_date_time', 
+        'arrival_date_time',
+        'route',
+    ];
+
     public function user()
     {
         return $this->belongsTo(\App\Models\User::class);
@@ -18,12 +25,12 @@ class Schedule extends BaseModel
         return $this->belongsTo(\App\Models\Train::class);
     }
 
-    public function departureStation()
+    public function departure_station()
     {
         return $this->belongsTo(\App\Models\Station::class, 'departure_station_id');
     }
 
-    public function arrivalStation()
+    public function arrival_station()
     {
         return $this->belongsTo(\App\Models\Station::class, 'arrival_station_id');
     }
@@ -33,22 +40,17 @@ class Schedule extends BaseModel
         return $this->belongsTo(\App\Models\Operator::class);
     }
 
-    public function departureDateTime($format = 'F j, Y @ H:i a')
+    public function getDepartureDateTimeAttribute()
     {
-        return $this->dateTime($format, $this->departure_date, $this->departure_time);
+        return $this->attributes['departure_date_time'] = $this->dateTime($this->departure_date, $this->departure_time);
     }
 
-    public function arrivalDateTime($format = 'F j, Y @ H:i a')
+    public function getArrivalDateTimeAttribute()
     {
-        return $this->dateTime($format, $this->arrival_date, $this->arrival_time);
+        return $this->attributes['arrival_date_time'] = $this->dateTime($this->arrival_date, $this->arrival_time);
     }
 
-    public function dateTime($format, $date, $time)
-    {
-        return date($format, strtotime("{$date} {$time}"));
-    }
-
-    public function duration()
+    public function getDurationAttribute()
     {
         $interval = $this->calculateDuration();
 
@@ -61,7 +63,23 @@ class Schedule extends BaseModel
         if ($interval->i) { $duration .= $interval->format("%i minutes "); }
         if ($interval->s) { $duration .= $interval->format("%s seconds "); }
 
-        return $duration;
+        return $this->attributes['duration'] = $duration;
+    }
+
+    public function getRouteAttribute() 
+    {
+        $routes = [
+            'show'      => route('schedules.show', $this), 
+            'edit'      => route('schedules.edit', $this), 
+            'update'    => route('schedules.update', $this),
+        ];
+
+        return $this->attributes['routes'] = $routes;
+    }
+
+    public function dateTime($date, $time)
+    {
+        return date('F j, Y @ H:i a', strtotime("{$date} {$time}"));
     }
 
     private function calculateDuration()
@@ -70,29 +88,5 @@ class Schedule extends BaseModel
         $arrival   = new DateTime("{$this->arrival_date} {$this->arrival_time}");
 
         return $departure->diff($arrival);
-    }
-
-    public function formattedData() 
-    {
-        return [
-            'id'    => $this->id, 
-            'train' => $this->train->formattedData(), 
-            'departure'     => [
-                'station'   => $this->departureStation->formattedData(), 
-                'date'      => $this->departure_date, 
-                'time'      => $this->departure_time, 
-                'formatted_date_time'   => $this->departureDateTime(), 
-            ],
-            'arrival'     => [
-                'station'   => $this->arrivalStation->formattedData(), 
-                'date'      => $this->arrival_date, 
-                'time'      => $this->arrival_time, 
-                'formatted_date_time'   => $this->arrivalDateTime(), 
-            ],
-            'duration'      => $this->duration(), 
-            'status'        => $this->status,
-            'operator'  => $this->operator->formattedData(),
-            'timestamps'    => $this->getTimestamps(), 
-        ];
     }
 }

@@ -8,6 +8,8 @@ class Operator extends BaseModel
 
     public $optionFields = ['id', 'first_name', 'last_name'];
 
+    protected $appends = ['full_name'];
+
     public function user()
     {
         return $this->belongsTo(\App\Models\User::class);
@@ -18,18 +20,8 @@ class Operator extends BaseModel
         return $this->hasMany(\App\Models\Schedule::class);
     }
 
-    public function name()
+    public function getFUllNameAttribute()
     {
         return $this->first_name . ' ' . $this->last_name;
-    }
-
-    public function formattedData() 
-    {
-        return [
-            'id'    => $this->id, 
-            'first_name' => $this->first_name, 
-            'last_name' => $this->last_name, 
-            'timestamps'    => $this->getTimestamps(), 
-        ];
     }
 }

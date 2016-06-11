@@ -8,6 +8,8 @@ class Train extends BaseModel
 
     public $optionFields = ['id', 'name'];
 
+    protected $appends = ['total_seats'];
+
     public function user()
     {
         return $this->belongsTo(\App\Models\User::class);
@@ -18,23 +20,8 @@ class Train extends BaseModel
         return $this->hasMany(\App\Models\Schedule::class);
     }
 
-    public function totalSeats()
+    public function getTotalSeatsAttribute()
     {
-        return number_format($this->total_seats) . ' seats';
-    }
-
-    public function formattedData() 
-    {
-        return [
-            'id'    => $this->id, 
-            'code'  => $this->code, 
-            'name'  => $this->name, 
-            'total_seats'   => $this->total_seats, 
-            'active'        => $this->active, 
-            'timestamps'    => [
-                'created_at'    => $this->created_at->toDateTimeString(), 
-                'updated_at'    => $this->updated_at->toDateTimeString(),
-            ],
-        ];
+        return $this->attributes['total_seats'] = number_format($this->total_seats) . ' seats';
     }
 }
