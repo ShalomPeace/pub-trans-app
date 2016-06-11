@@ -20,8 +20,8 @@ class Operator extends BaseModel
         return $this->hasMany(\App\Models\Schedule::class);
     }
 
-    public function getFUllNameAttribute()
+    public function getFullNameAttribute()
     {
-        return $this->first_name . ' ' . $this->last_name;
+        return $this->attributes['full_name'] = ucwords($this->first_name . ' ' . $this->last_name);
     }
 }

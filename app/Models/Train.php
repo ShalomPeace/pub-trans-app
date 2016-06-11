@@ -20,8 +20,8 @@ class Train extends BaseModel
         return $this->hasMany(\App\Models\Schedule::class);
     }
 
-    public function getTotalSeatsAttribute()
+    public function getTotalSeatsAttribute($value)
     {
-        return $this->attributes['total_seats'] = number_format($this->total_seats) . ' seats';
+        return number_format($value) . ' seats';
     }
 }
