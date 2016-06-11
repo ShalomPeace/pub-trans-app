@@ -10,7 +10,7 @@ class BaseModel extends Model
 
     protected $activeField = 'active';
 
-    protected $routeKey;
+    protected $routeName;
 
     public function scopeActive($query, $active = 1) 
     {
@@ -24,19 +24,19 @@ class BaseModel extends Model
 
     public function getRouteAttribute() 
     {
-        $routeKey = $this->getRouteKey();
+        $route = $this->getRouteName();
 
         $routes = [
-            'show'      => route("{$routeKey}.show", $this), 
-            'edit'      => route("{$routeKey}.edit", $this), 
-            'update'    => route("{$routeKey}.update", $this),
+            'show'      => route("{$route}.show", $this), 
+            'edit'      => route("{$route}.edit", $this), 
+            'update'    => route("{$route}.update", $this),
         ];
 
         return $this->attributes['routes'] = $routes;
     }
 
-    private function getRouteKey() 
+    private function getRouteName() 
     {
-        return $this->routeKey ? $this->routeKey : str_plural(strtolower(get_class($this)), $count = 2);
+        return $this->routeName ? $this->routeName : str_plural(strtolower(class_basename($this)));
     }
 }
