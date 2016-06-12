@@ -1,12 +1,16 @@
 @extends('layout.template')
 
 @section('content')
-    <section class="row">
+    <section class="row" ng-controller="OperatorController">
         <div class="col s12">
-            <section class="widget">
+            <section class="widget" ng-init="operator = {{ $operator }}">
                 <main class="widget-body">
-                    <a href="{!! route('operators.edit', $operator) !!}" class="btn btn-small btn-info right">Edit Operator</a>
-                    <h5>{{ $operator->name() }}</h5>
+                    <btn-link href="@{{ operator.route.edit }}" 
+                              class="btn-small right" 
+                              ng-if="{{ auth()->check() }}">
+                        Edit Operator
+                    </btn-link>
+                    <h5>@{{ operator.full_name }}</h5>
                     <br>
                     <p>Schedules</p>
                     <table>
@@ -23,27 +27,22 @@
                         </tr>
                         </thead>
                         <tbody>
-                            @if ( ! $operator->schedules->isEmpty())
-                                @foreach ($operator->schedules as $schedule)
-                                    <tr>
-                                        <td>{{ $schedule->departureStation->name }}</td>
-                                        <td>{{ $schedule->arrivalStation->name }}</td>
-                                        <td>{{ $schedule->departureDateTime() }}</td>
-                                        <td>{{ $schedule->arrivalDateTime() }}</td>
-                                        <td>{{ $schedule->duration() }}</td>
-                                        <td>{{ $schedule->train->code }}</td>
-                                        <td class="status-active">Active</td>
-                                        <td class="right-align">
-                                            <a href="{{ route('schedules.show', $schedule) }}">View</a>
-                                            <a href="{{ route('schedules.edit', $schedule) }}">Edit</a>
-                                        </td>
-                                    </tr>
-                                @endforeach
-                            @else
-                                <tr>
-                                    <td colspan="7" class="center">No schedules found.</td>
-                                </tr>
-                            @endif
+                            <tr ng-if="operator.schedules.length" ng-repeat="schedule in operator.schedules">
+                                <td>@{{ schedule.departure_station.name }}</td>
+                                <td>@{{ schedule.arrival_station.name }}</td>
+                                <td>@{{ schedule.departure_date_time }}</td>
+                                <td>@{{ schedule.arrival_date_time }}</td>
+                                <td>@{{ schedule.duration }}</td>
+                                <td>@{{ schedule.train.code }}</td>
+                                <td class="status-text-@{{ schedule.status.toLowerCase() }}">@{{ schedule.status }}</td>
+                                <td class="right-align">
+                                    <a href="@{{ schedule.route.show }}">View</a>
+                                    <a href="@{{ schedule.route.edit }}">Edit</a>
+                                </td>
+                            </tr>
+                            <tr ng-if=" ! operator.schedules.length">
+                                <td colspan="8" class="center">No schedules found.</td>
+                            </tr>
                         </tbody>
                     </table>
                 </main>

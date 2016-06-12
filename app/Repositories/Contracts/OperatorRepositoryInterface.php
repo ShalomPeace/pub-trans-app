@@ -2,4 +2,9 @@
 
 namespace App\Repositories\Contracts;
 
-interface OperatorRepositoryInterface {}
+interface OperatorRepositoryInterface 
+{
+	public function getOperatorList();
+
+	public function getOperatorWithSchedules($id);
+}

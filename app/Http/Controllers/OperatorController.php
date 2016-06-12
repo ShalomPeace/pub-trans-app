@@ -22,7 +22,7 @@ class OperatorController extends Controller
      */
     public function index()
     {
-        $operators = $this->repository->getAll();
+        $operators = $this->repository->getOperatorList();
 
         return view('operators.index', ['operators' => $operators]);
     }
@@ -73,9 +73,7 @@ class OperatorController extends Controller
      */
     public function show($id)
     {
-        $operator = $this->repository->find($id);
-
-        $operator->load('schedules', 'schedules.departurestation', 'schedules.arrivalstation', 'schedules.train');
+        $operator = $this->repository->getOperatorWithSchedules($id);
 
         return view('operators.show', ['operator' => $operator]);
     }
@@ -115,7 +113,8 @@ class OperatorController extends Controller
                                               ->with('success', 'Operator successfully updated.')
                                   : response()->json([
                                         'status'    => 1,
-                                        'message'   => 'Operator successfully updated.'
+                                        'message'   => 'Operator successfully updated.', 
+                                        'redirect'  => route('operators.show', $id),
                                   ]);
     }
 
