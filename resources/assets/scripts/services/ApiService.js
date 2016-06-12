@@ -1,8 +1,8 @@
 App.service('ApiService', 
 
-['$rootScope', '$http', '$timeout', 
+['$rootScope', '$http', '$timeout', 'ResponseService', 
 
-function ($rootScope, $http, $timeout) 
+function ($rootScope, $http, $timeout, ResponseService) 
 {
 	this.url = $rootScope.baseUrl + 'api/v1/';
 
@@ -46,7 +46,7 @@ function ($rootScope, $http, $timeout)
 
 		$http(config).then(function(response) {
 			$timeout(function() {
-				callback(response.data);
+				ResponseService.handle(response.data, callback);
 			}, 1000);
 		});
 	};

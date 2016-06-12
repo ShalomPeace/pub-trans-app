@@ -15,9 +15,9 @@ App.run(['$rootScope', 'MessageFactory', function ($rootScope, MessageFactory) {
 }]);
 App.service('ApiService', 
 
-['$rootScope', '$http', '$timeout', 
+['$rootScope', '$http', '$timeout', 'ResponseService', 
 
-function ($rootScope, $http, $timeout) 
+function ($rootScope, $http, $timeout, ResponseService) 
 {
 	this.url = $rootScope.baseUrl + 'api/v1/';
 
@@ -61,7 +61,7 @@ function ($rootScope, $http, $timeout)
 
 		$http(config).then(function(response) {
 			$timeout(function() {
-				callback(response.data);
+				ResponseService.handle(response.data, callback);
 			}, 1000);
 		});
 	};
@@ -119,6 +119,50 @@ App.factory('MessageFactory', [function ()
 	};
 
 	return service;
+}]);
+App.factory('OperatorFactory', 
+
+['ApiService', 
+
+function (ApiService) 
+{
+	var operator = {};
+
+	operator.create = function(data, callback) {
+		ApiService.post('operators', data, callback);
+	}; 
+
+	operator.update = function(data, callback) {
+		ApiService.post('operators/' + data.id, data, callback);	
+	};
+
+	return operator;
+}]);
+App.service('ResponseService', 
+
+['$rootScope', '$timeout', 
+
+function ($rootScope, $timeout) 
+{
+	this.handle = function(response, callback) {
+		console.log(response);
+
+		if (response.status) {
+			$rootScope.messages.add('success', response.message);
+
+			if (typeof callback === 'function') callback(response);
+
+			if (response.redirect) {
+				$timeout(function() {
+					window.location = response.redirect;
+				}, 1000);
+			}
+		} else {
+			$rootScope.loading = false;
+
+			$rootScope.messages.add('error', response.message);
+		}
+	};
 }]);
 App.service('ScheduleFactory', 
 
@@ -270,6 +314,22 @@ App.controller('HomeController',
 
 function($scope) {
 
+}]);
+App.controller('OperatorController', 
+
+['$scope', '$timeout', 'OperatorFactory',
+
+function ($scope, $timeout, OperatorFactory) 
+{
+	$scope.submit = function(event, type) {
+		event.preventDefault();
+
+		$scope.loading = true;
+
+		OperatorFactory[type]($scope.form);
+	};
+
+	window.scope = $scope;
 }]);
 App.controller('ScheduleController',
 
