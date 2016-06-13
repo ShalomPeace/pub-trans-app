@@ -9,21 +9,7 @@ function ($scope, $timeout, StationFactory)
 
 		$scope.loading = true;
 
-		var method = StationFactory[type];
-
-		method($scope.form, function(response) {
-			if (response.status) {
-				$scope.messages.add('success', response.message);
-			
-				$timeout(function() {
-					window.location = response.redirect;
-				}, 1000);
-			} else {
-				$scope.loading = false;
-
-				$scope.messages.add('error', response.message);
-			}
-		});
+		StationFactory[type]($scope.form);
 	};
 	
 	window.scope = $scope;
