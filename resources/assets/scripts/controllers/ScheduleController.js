@@ -4,50 +4,14 @@ App.controller('ScheduleController',
 
 function($scope, $timeout, $filter, ScheduleFactory) 
 {
-	$scope.create = function(event) {
+	$scope.submit = function(event, type) {
 		event.preventDefault();
-
+		
 		$scope.loading = true;
 
 		var data = $scope.filterDateTime($scope.form);
 
-		ScheduleFactory.create(data, function(response) {
-			if (response.status) {
-				$scope.messages.add('success', response.message);
-
-				$timeout(function() {
-					window.location = response.redirect;
-				}, 1000);
-			} else {
-				$scope.loading = false;
-
-				$scope.messages.add('error', response.message);
-			}
-		});
-	};
-
-	$scope.update = function(event) {
-		event.preventDefault();
-
-		$scope.loading = true;
-
-		var data = $scope.filterDateTime($scope.form);
-
-		console.log(data);
-
-		ScheduleFactory.update(data, function(response) {
-			if (response.status) {
-				$scope.messages.add('success', response.message);
-
-				$timeout(function() {
-					window.location = response.redirect;
-				}, 1000);
-			} else {
-				$scope.loading = false;
-
-				$scope.messages.add('error', response.message);
-			}
-		});
+		ScheduleFactory[type](data);	
 	};
 
 	$scope.search = function(event) {
@@ -67,12 +31,6 @@ function($scope, $timeout, $filter, ScheduleFactory)
 
 	$scope.getDateTime = function(date_time) {
 		return (typeof date_time !== 'undefined') ? new Date(date_time) : new Date();
-	};
-
-	$scope.getDataById = function(data, id) {
-		for(var key = 0; key < data.length; key++) {
-			if (data[key].id == id) return key;
-		}
 	};
 
 	$scope.filterDateTime = function(data) {

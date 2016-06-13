@@ -5,14 +5,10 @@
         <div class="col s12 l8 offset-l2">
             <section class="widget" ng-init="sched = {{ $schedule }}">
                 <main class="widget-body">
-                    <section class="row" ng-show="messages.get().length">
-                        <div class="col s12">
-                            <p ng-repeat="message in messages.get()" class="@{{ message.type }}-message center-align">@{{ message.message }}</p>
-                        </div>
-                    </section>
-                    <form action="{!! route('schedules.update', $schedule) !!}" method="POST" name="schedule" ng-submit="update($event)" novalidate>
+                    @include('../partials.messages')
+                    <form action="@{{ sche.route.update }}" method="POST" name="schedule" ng-submit="submit($event, 'update')" novalidate autocomplete="off">
                         {!! csrf_field() !!}
-                        <input type="hidden" name="_method" value="PUT"/>
+                        <input type="hidden" ng-model="form._method" name="_method" ng-init="form._method = 'PUT'" value="PUT"/>
                         <input type="hidden" ng-model="form.id" ng-init="form.id = sched.id">
                         <section class="row">
                             <fieldset class="col s12 input-field" ng-init="departureStations = {{ $stations }}">

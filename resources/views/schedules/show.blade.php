@@ -9,14 +9,14 @@
                         <aside class="right">
                             <button type="button" class="btn btn-small btn-success status-@{{ schedule.status.toLowerCase() }}">@{{ schedule.status }}</button>
                         </aside>
-                        <p class="stations">@{{ schedule.departure.station.name }} - @{{ schedule.arrival.station.name }}</p>
-                        <p><strong>Departure:</strong> @{{ schedule.departure.formatted_date_time }}</p>
-                        <p><strong>Arrival:</strong> @{{ schedule.arrival.formatted_date_time }}</p>
+                        <p class="stations">@{{ schedule.departure_station.name }} - @{{ schedule.arrival_station.name }}</p>
+                        <p><strong>Departure:</strong> @{{ schedule.departure_date_time }}</p>
+                        <p><strong>Arrival:</strong> @{{ schedule.arrival_date_time }}</p>
                         <p><strong>Duration:</strong> @{{ schedule.duration }}</p>
                         <p><strong>Train:</strong> @{{ schedule.train.name }}</p>
-                        <p><strong>Operator:</strong> @{{ schedule.operator.first_name }} @{{ schedule.operator.last_name }}</p>
+                        <p><strong>Operator:</strong> @{{ schedule.operator.full_name }}</p>
                         <br>
-                        <a href="schedules/@{{ schedule.id }}/edit" ng-if="{{ auth()->check() }}" class="btn btn-small btn-info">Edit Schedule</a>
+                        <btn-link href="@{{ schedule.route.edit }}" ng-if="{{ auth()->check() }}" class="btn-small" ng-transclude>Edit Schedule</btn-link>
                     </article>
                 </main>
             </section>

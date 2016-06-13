@@ -11,8 +11,6 @@ function (ApiService)
 	};
 
 	schedule.update = function(data, callback) {
-		data._method = 'PUT';
-
 		ApiService.post('schedules/' + data.id , data, callback);	
 	};
 

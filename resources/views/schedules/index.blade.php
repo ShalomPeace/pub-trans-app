@@ -41,9 +41,7 @@
                             </form>
                         </div>
                         <div class="col s3">
-                           @if (auth()->check())
-                                <btn-link href="{!! route('schedules.create') !!}" class="right">Add Schedule</btn-link>
-                           @endif
+                            <btn-link href="{!! route('schedules.create') !!}" class="right" ng-if="{{ auth()->check() }}">Add Schedule</btn-link>
                         </div>
                     </section>
                     <section class="row">
@@ -51,17 +49,15 @@
                             <section ng-show="loading" class="center">
                                 <preloader-circle></preloader-circle>
                             </section>
-                            <section ng-init="schedules = {{ $schedules}}" ng-show="schedules.length && ! loading">
+                            <section ng-init="schedules = {{ $schedules }}" ng-show="schedules.length && ! loading">
                                 <article class="schedules" ng-repeat="schedule in schedules">
                                     <aside class="right">
-                                        <a href="schedules/@{{ schedule.id }} " class="btn btn-small btn-info">View</a>
-                                        @if (auth()->check())
-                                            <a href="schedules/@{{ schedule.id }}/edit" class="btn btn-small btn-success">Edit</a>
-                                        @endif
+                                        <btn-link href="@{{ schedule.route.show }}" class="btn-small btn-info" ng-transclude>View</btn-link>
+                                        <btn-link href="@{{ schedule.route.edit }}" class="btn-small btn-info" ng-if="{{ auth()->check() }}" ng-transclude>Edit</btn-link>
                                     </aside>
-                                    <p class="stations">@{{ schedule.departure.station.name }} - @{{ schedule.arrival.station.name }}</p>
-                                    <p><strong>Departure:</strong> <date>@{{ schedule.departure.formatted_date_time }}</date></p>
-                                    <p><strong>Arrival:</strong> <date>@{{ schedule.arrival.formatted_date_time }}</date></p>
+                                    <p class="stations">@{{ schedule.departure_station.name }} - @{{ schedule.arrival_station.name }}</p>
+                                    <p><strong>Departure:</strong> <date>@{{ schedule.departure_date_time }}</date></p>
+                                    <p><strong>Arrival:</strong> <date>@{{ schedule.arrival_date_time }}</date></p>
                                     <p><stron>Duration:</stron> @{{ schedule.duration }}</p>
                                     <p><strong>Train Number:</strong> @{{ schedule.train.name }}</p>
                                     <p><strong>Status:</strong> <span class="status-@{{ schedule.status || 'active' }}">@{{ schedule.status || 'Active' }}</span></p>

@@ -5,12 +5,8 @@
         <div class="col s12 l8 offset-l2">
             <section class="widget">
                 <main class="widget-body">
-                    <section class="row" ng-show="messages.get().length">
-                        <div class="col s12">
-                            <p ng-repeat="message in messages.get()" class="@{{ message.type }}-message center-align">@{{ message.message }}</p>
-                        </div>
-                    </section>
-                    <form action="{!! route('schedules.store') !!}" method="POST" name="schedule" ng-submit="create($event)" novalidate>
+                    @include('../partials/messages')
+                    <form action="{!! route('schedules.store') !!}" method="POST" name="schedule" ng-submit="submit($event, 'create')" novalidate autocomplete="off">
                         {!! csrf_field() !!}
                         <input type="hidden" ng-model="form.status" ng-init="form.status = 'Active'">
                         <section class="row">
