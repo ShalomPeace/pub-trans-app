@@ -16,9 +16,19 @@ class ScheduleRepository extends Repository implements ScheduleRepositoryInterfa
     {
         $today = date('Y-m-d');
 
-        return $this->model->where('departure_date', '>=', $today)
+        return $this->model->with('departure_station', 'arrival_station', 'train', 'operator')
+                           ->where('departure_date', '>=', $today)
                            ->orWhere('arrival_date', '>=', $today)
-                               ->get();
+                           ->get();
+    }
+
+    public function getSchedule($id) 
+    {
+        $schedule = $this->find($id);
+
+        $schedule->load('departure_station', 'arrival_station', 'train', 'operator');
+
+        return $schedule;
     }
 
     public function search($departure, $arrival)

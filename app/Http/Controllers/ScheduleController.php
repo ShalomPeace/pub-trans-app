@@ -90,9 +90,7 @@ class ScheduleController extends Controller
      */
     public function show($id)
     {
-        $schedule = $this->repository->find($id);
-
-        $schedule = collect($schedule->formattedData());
+        $schedule = $this->repository->getSchedule($id);
 
         return view('schedules.show', ['schedule' => $schedule]);
     }
@@ -111,9 +109,7 @@ class ScheduleController extends Controller
         $stations  = $stationRepository->getForField();
         $trains    = $trainRepository->getForField();
         $operators = $operatorRepository->getForField();
-        $schedule  = $this->repository->find($id);
-
-        $schedule->load('departurestation', 'arrivalstation', 'train', 'operator');
+        $schedule  = $this->repository->getSchedule($id);
 
         $data = [
             'stations'  => $stations,
