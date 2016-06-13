@@ -11,4 +11,19 @@ class OperatorRepository extends Repository implements OperatorRepositoryInterfa
 	{
 		$this->model = $model;
 	}
+
+	public function getOperatorList() 
+	{
+		return $this->model->active()
+						   ->get();
+	}
+
+	public function getOperatorWithSchedules($id) 
+	{
+        $operator = $this->find($id);
+
+        $operator->load('schedules', 'schedules.departure_station', 'schedules.arrival_station', 'schedules.train');
+
+        return $operator;
+	}
 }
