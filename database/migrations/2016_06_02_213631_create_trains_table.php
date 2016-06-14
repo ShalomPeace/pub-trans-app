@@ -18,7 +18,7 @@ class CreateTrainsTable extends Migration
             $table->string('code', 10);
             $table->string('name', 20);
             $table->tinyInteger('total_seats')->unsigned();
-            $table->boolean('active')->unsigned();
+            $table->boolean('active')->unsigned()->default(1);
             $table->timestamps();
             $table->integer('user_id')->unsigned()->index();
 

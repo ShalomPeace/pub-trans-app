@@ -16,7 +16,7 @@ class CreateStationsTable extends Migration
         {
             $table->increments('id');
             $table->string('name', 50);
-            $table->boolean('active');
+            $table->boolean('active')->unsigned()->default(1);
             $table->timestamps();
             $table->integer('user_id')->unsigned()->index();
 
