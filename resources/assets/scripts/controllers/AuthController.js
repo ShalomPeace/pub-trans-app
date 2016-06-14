@@ -13,8 +13,6 @@ function ($scope, $timeout, AuthFactory) {
 
 		$scope.loading = true;
 
-		$scope.messages = [];
-
 		AuthFactory.login($scope.form);
 	};
 
