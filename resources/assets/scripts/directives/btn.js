@@ -21,3 +21,15 @@ App.directive('btnLink', [function () {
 		}
 	};
 }]);
+
+App.directive('btnNav', [function () {
+	return {
+		template: '<a href="#" class="button-collapse" ng-transclude></a>',
+		replace: true,
+		transclude: true,
+		restrict: 'EA',
+		link: function postLink(scope, iElement, iAttrs) {
+			iElement.sideNav();
+		}
+	};
+}]);
