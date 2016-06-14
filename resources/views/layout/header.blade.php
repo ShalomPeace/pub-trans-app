@@ -3,10 +3,15 @@
         <section class="nav-wrapper container">
             <ul id="title" class="left">
                 <li>
+                    <btn-nav data-activates="side-nav">
+                        <i class="material-icons">menu</i>
+                    </btn-nav>
+                </li>
+                <li>
                     <a href="{!! route('index') !!}">PUBTRANSAPP</a>
                 </li>
             </ul>
-            <ul id="navigation" class="right">
+            <ul id="navigation" class="right hide-on-med-and-down">
                 <li>
                     <a href="{!! route('schedules.index') !!}">Schedules</a>
                 </li>

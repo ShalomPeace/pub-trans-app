@@ -251,3 +251,11 @@ p {
 [ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
   display: none !important;
 }
+
+nav {
+	background: none;
+
+	.button-collapse i {
+		font-size: 2rem;
+	}
+}
