@@ -7,17 +7,33 @@ use App\Repositories\Contracts\TrainRepositoryInterface;
 
 class TrainRepository extends Repository implements TrainRepositoryInterface
 {
+    /**
+     * Constructor
+     * 
+     * @param \App\Models\Train $model
+     */
     public function __construct(Train $model)
     {
         $this->model = $model;
     }
 
+    /**
+     * Get list of active trains.
+     * 
+     * @return Illuminate\Database\Eloquent\Collection
+     */
     public function getTrainList() 
     {
     	return $this->model->active()
     					   ->get();
     }
 
+    /**
+     * Get train by its primary key with list of schedules.
+     * 
+     * @param  int $id
+     * @return \App\Models\Train    
+     */
     public function getTrainWithSchedules($id) 
     {
     	$train = $this->find($id);
@@ -27,6 +43,11 @@ class TrainRepository extends Repository implements TrainRepositoryInterface
         return $train;
     }
 
+    /**
+     * Get incremented code for new train.
+     * 
+     * @return string
+     */
     public function getNextCode() 
     {
     	$last = $this->model->orderBy('id', 'DESC')->first(['code']);

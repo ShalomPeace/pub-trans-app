@@ -7,11 +7,21 @@ use App\Repositories\Contracts\ScheduleRepositoryInterface;
 
 class ScheduleRepository extends Repository implements ScheduleRepositoryInterface
 {
+    /**
+     * Constructor
+     * 
+     * @param \App\Models\Schedule $model
+     */
     public function __construct(Schedule $model)
     {
         $this->model = $model;
     }
 
+    /**
+     * Get latest departure and arrival schedules.
+     * 
+     * @return Illuminate\Database\Eloquent\Collection
+     */
     public function getLatestSchedules() 
     {
         $today = date('Y-m-d');
@@ -22,6 +32,12 @@ class ScheduleRepository extends Repository implements ScheduleRepositoryInterfa
                            ->get();
     }
 
+    /**
+     * Get schedule by its pimary key.
+     * 
+     * @param  int $id
+     * @return \App\Models\Schedule
+     */
     public function getSchedule($id) 
     {
         $schedule = $this->find($id);
@@ -31,6 +47,13 @@ class ScheduleRepository extends Repository implements ScheduleRepositoryInterfa
         return $schedule;
     }
 
+    /**
+     * Search schedule by station.
+     * 
+     * @param  int $from
+     * @param  int $to
+     * @return Illuminate\Database\Eloquent\Collection|null
+     */
     public function search($departure, $arrival)
     {
         $query = $this->model->with('departure_station', 'arrival_station', 'train', 'operator');

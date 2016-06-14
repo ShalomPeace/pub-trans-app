@@ -7,11 +7,21 @@ use App\Repositories\Contracts\StationRepositoryInterface;
 
 class StationRepository extends Repository implements StationRepositoryInterface
 {
+    /**
+     * Constructor
+     * 
+     * @param \App\Models\Station $model
+     */
     public function __construct(Station $model)
     {
         $this->model = $model;
     }
 
+    /**
+     * Get station with departure and arrival schedules.
+     * 
+     * @return Illuminate\Database\Eloquent\Collection|null
+     */
     public function getStationsWithSchedules() 
     {
     	return $this->model->active()
@@ -19,6 +29,12 @@ class StationRepository extends Repository implements StationRepositoryInterface
     					   ->get();
     }
 
+    /**
+     * Get station by its primary key and  
+     * 
+     * @param  integer $id
+     * @return \App\Models\Station
+     */
     public function getStationWithSchedules($id) 
     {
         $station = $this->find($id);
