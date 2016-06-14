@@ -13,9 +13,7 @@
 
 $factory->define(App\Models\User::class, function (Faker\Generator $faker) {
     return [
-        'name' => $faker->name,
         'username' => 'admin',
-        'email_address' => $faker->safeEmail,
         'password' => bcrypt('secret'),
         'remember_token' => str_random(10),
     ];
