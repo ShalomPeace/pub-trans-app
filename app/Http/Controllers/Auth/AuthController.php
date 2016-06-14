@@ -74,7 +74,8 @@ class AuthController extends Controller
         return ! $request->ajax() ? redirect()->route('index')
                                   : response()->json([
                                         'status'    => 1, 
-                                        'message'   => 'Login successful! Redirecting...',
+                                        'message'   => 'Login successful! Redirecting...', 
+                                        'redirect'  => route('index'),
                                     ]);
     }
 }
