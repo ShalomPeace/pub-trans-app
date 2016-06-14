@@ -19,6 +19,8 @@ class ScheduleController extends Controller
      */
     public function __construct(ScheduleRepositoryInterface $repository)
     {
+        $this->middleware('auth', ['except' => ['index', 'show']]);
+
         $this->repository = $repository;
     }
 

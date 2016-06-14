@@ -18,6 +18,8 @@ class TrainController extends Controller
      */
     public function __construct(TrainRepositoryInterface $repository)
     {
+        $this->middleware('auth');
+        
         $this->repository = $repository;
     }
 

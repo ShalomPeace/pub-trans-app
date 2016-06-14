@@ -17,6 +17,8 @@ class StationController extends Controller
      */
     public function __construct(StationRepositoryInterface $repository)
     {
+        $this->middleware('auth', ['except' => ['index', 'show']]);
+
         $this->repository = $repository;
     }
 

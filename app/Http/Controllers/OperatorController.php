@@ -17,6 +17,8 @@ class OperatorController extends Controller
      */
     public function __construct(OperatorRepositoryInterface $repository)
     {
+        $this->middleware('auth');
+
         $this->repository = $repository;
     }
 
