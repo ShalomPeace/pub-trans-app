@@ -69,6 +69,13 @@ class AuthController extends Controller
         ]);
     }
 
+    /**
+     * Handle response once the user is authenticated
+     * 
+     * @param  \Illuminate\Http\Request $request
+     * @param  \App\Models\User         $user
+     * @return \Illuminate\Http\Response
+     */
     public function authenticated($request, $user) 
     {
         return ! $request->ajax() ? redirect()->route('index')

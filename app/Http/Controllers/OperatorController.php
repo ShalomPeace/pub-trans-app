@@ -10,13 +10,18 @@ use App\Http\Controllers\Controller;
 
 class OperatorController extends Controller
 {
+    /**
+     * Constructor
+     * 
+     * @param \App\Repositories\Contracts\OperatorRepositoryInterface $repository
+     */
     public function __construct(OperatorRepositoryInterface $repository)
     {
         $this->repository = $repository;
     }
 
     /**
-     * Display a listing of the resource.
+     * Display a listing of operators.
      *
      * @return \Illuminate\Http\Response
      */
@@ -28,7 +33,7 @@ class OperatorController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
+     * Show the form for creating a new operator.
      *
      * @return \Illuminate\Http\Response
      */
@@ -38,9 +43,9 @@ class OperatorController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
-     *
-     * @param  \Illuminate\Http\Request  $request
+     * Store a newly created operator in storage.
+     * 
+     * @param  \App\Http\Requests\OperatorFormRequest $request
      * @return \Illuminate\Http\Response
      */
     public function store(OperatorFormRequest $request)
@@ -66,7 +71,7 @@ class OperatorController extends Controller
     }
 
     /**
-     * Display the specified resource.
+     * Display the specified operator.
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response
@@ -79,7 +84,7 @@ class OperatorController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
+     * Show the form for editing the specified operator.
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response
@@ -92,9 +97,9 @@ class OperatorController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
+     * Update the specified operator in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Http\Requests\OperatorFormRequest  $request
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
@@ -119,7 +124,7 @@ class OperatorController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Remove the specified operator from storage.
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response

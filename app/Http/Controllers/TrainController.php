@@ -11,13 +11,18 @@ use App\Http\Requests\TrainFormRequest;
 
 class TrainController extends Controller
 {
+    /**
+     * Constructor
+     * 
+     * @param \App\Repositories\Contracts\TrainRepositoryInterface $repository
+     */
     public function __construct(TrainRepositoryInterface $repository)
     {
         $this->repository = $repository;
     }
 
     /**
-     * Display a listing of the resource.
+     * Display a listing of trains.
      *
      * @return \Illuminate\Http\Response
      */
@@ -29,7 +34,7 @@ class TrainController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
+     * Show the form for creating a new train.
      *
      * @return \Illuminate\Http\Response
      */
@@ -41,9 +46,9 @@ class TrainController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Store a newly created train in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Http\Requests\TrainFormRequest $request
      * @return \Illuminate\Http\Response
      */
     public function store(TrainFormRequest $request)
@@ -69,7 +74,7 @@ class TrainController extends Controller
     }
 
     /**
-     * Display the specified resource.
+     * Display the specified train.
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response
@@ -82,7 +87,7 @@ class TrainController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
+     * Show the form for editing the specified train.
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response
@@ -95,9 +100,9 @@ class TrainController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
+     * Update the specified train in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Http\Requests\TrainFormRequest $request
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
@@ -122,7 +127,7 @@ class TrainController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Remove the specified train from storage.
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response
