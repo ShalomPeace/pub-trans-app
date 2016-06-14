@@ -11,5 +11,10 @@ abstract class Controller extends BaseController
 {
     use AuthorizesRequests, DispatchesJobs, ValidatesRequests;
 
+    /**
+     * The repository used by the controller
+     * 
+     * @var object
+     */
     protected $repository;
 }

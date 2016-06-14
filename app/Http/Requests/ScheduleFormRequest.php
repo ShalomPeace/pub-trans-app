@@ -13,7 +13,7 @@ class ScheduleFormRequest extends Request
      */
     public function authorize()
     {
-        return true;
+        return auth()->check();
     }
 
     /**

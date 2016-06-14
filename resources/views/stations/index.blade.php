@@ -10,7 +10,7 @@
         <section class="row" ng-init="chunkStations = {{ $stations->chunk(3) }}">
             <div class="col s12">
                 <div class="row row-no-mb" ng-repeat="stations in chunkStations">
-                    <div class="col s4" ng-repeat="station in stations">
+                    <div class="col s12 m6 l4" ng-repeat="station in stations">
                         <section class="row row-no-mb">
                             <div class="col s12">
                                <div class="card">

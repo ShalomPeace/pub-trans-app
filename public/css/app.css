@@ -6304,6 +6304,11 @@ input:not([type]), input[type=text], input[type=password], input[type=email], in
 [ng\:cloak], [ng-cloak], [data-ng-cloak], [x-ng-cloak], .ng-cloak, .x-ng-cloak {
   display: none !important; }
 
+nav {
+  background: none; }
+  nav .button-collapse i {
+    font-size: 2rem; }
+
 body {
   background: url("../images/bg.jpg") no-repeat fixed center center; }
 

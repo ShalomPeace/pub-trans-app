@@ -3,7 +3,7 @@
 @section('content')
     <div ng-controller="HomeController">
         <section class="row row-expand">
-            <div class="col s8 offset-s2" style="margin-top: 150px;">
+            <div class="col s12 l8 offset-l2" style="margin-top: 150px;">
                 <form action="{!! route('schedules.search') !!}" method="GET">
                     <section class="row row-expand" ng-init="stations = {{ $stations }}">
                         <fieldset class="col s12 m6 l6 input-field select-dropdown-box" ng-init="departureStations = stations">

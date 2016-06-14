@@ -16,7 +16,7 @@ class CreateOperatorsTable extends Migration
             $table->increments('id');
             $table->string('first_name', 50);
             $table->string('last_name', 50);
-            $table->boolean('active')->unsigned();
+            $table->boolean('active')->unsigned()->default(1);
             $table->timestamps();
             $table->integer('user_id')->unsigned()->index();
 

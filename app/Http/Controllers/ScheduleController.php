@@ -6,21 +6,28 @@ use App\Repositories\Contracts\OperatorRepositoryInterface;
 use App\Repositories\Contracts\ScheduleRepositoryInterface;
 use App\Repositories\Contracts\StationRepositoryInterface;
 use App\Repositories\Contracts\TrainRepositoryInterface;
-use Illuminate\Http\Request;
-
-use App\Http\Requests;
+use App\Http\Requests\ScheduleFormRequest;
 use App\Http\Controllers\Controller;
+use Illuminate\Http\Request;
 
 class ScheduleController extends Controller
 {
+    /**
+     * Constructor
+     * 
+     * @param \App\Repositories\Contracts\ScheduleRepositoryInterface $repository
+     */
     public function __construct(ScheduleRepositoryInterface $repository)
     {
+        $this->middleware('auth', ['except' => ['index', 'show']]);
+
         $this->repository = $repository;
     }
 
     /**
-     * Display a listing of the resource.
-     *
+     * Display a listing of schedules.
+     * 
+     * @param \App\Repositories\Contracts\StationRepositoryInterface $stationRepository
      * @return \Illuminate\Http\Response
      */
     public function index(StationRepositoryInterface $stationRepository)
@@ -35,8 +42,11 @@ class ScheduleController extends Controller
     }
 
     /**
-     * Show the form for creating a new resource.
-     *
+     * Show the form for creating a new schedule.
+     * 
+     * @param  \App\Repositories\Contracts\StationRepositoryInterface  $stationRepository
+     * @param  \App\Repositories\Contracts\TrainRepositoryInterface    $trainRepository
+     * @param  \App\Repositories\Contracts\OperatorRepositoryInterface $operatorRepository
      * @return \Illuminate\Http\Response
      */
     public function create(StationRepositoryInterface $stationRepository,
@@ -55,12 +65,12 @@ class ScheduleController extends Controller
     }
 
     /**
-     * Store a newly created resource in storage.
+     * Store a newly created schedule in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Http\Requests\ScheduleFormRequest $request
      * @return \Illuminate\Http\Response
      */
-    public function store(Requests\ScheduleFormRequest $request)
+    public function store(ScheduleFormRequest $request)
     {
         if ($schedule = $this->repository->create($request->input())) {
             return ! $request->ajax() ? redirect()->route('schedules.show', $schedule)
@@ -83,7 +93,7 @@ class ScheduleController extends Controller
     }
 
     /**
-     * Display the specified resource.
+     * Display the specified schedule.
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response
@@ -96,8 +106,11 @@ class ScheduleController extends Controller
     }
 
     /**
-     * Show the form for editing the specified resource.
+     * Show the form for editing the specified schedule.
      *
+     * @param  \App\Repositories\Contracts\StationRepositoryInterface  $stationRepository
+     * @param  \App\Repositories\Contracts\TrainRepositoryInterface    $trainRepository
+     * @param  \App\Repositories\Contracts\OperatorRepositoryInterface $operatorRepository
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
@@ -122,13 +135,13 @@ class ScheduleController extends Controller
     }
 
     /**
-     * Update the specified resource in storage.
+     * Update the specified schedule in storage.
      *
-     * @param  \Illuminate\Http\Request  $request
+     * @param  \App\Http\Requests\ScheduleFormRequest $request
      * @param  int  $id
      * @return \Illuminate\Http\Response
      */
-    public function update(Requests\ScheduleFormRequest $request, $id)
+    public function update(ScheduleFormRequest $request, $id)
     {
         if ( ! $this->repository->update($id, $request->input())) {
             return ! $request->ajax() ? redirect()->route('schedules.edit', $id)
@@ -150,7 +163,7 @@ class ScheduleController extends Controller
     }
 
     /**
-     * Remove the specified resource from storage.
+     * Remove the specified schedule from storage.
      *
      * @param  int  $id
      * @return \Illuminate\Http\Response
@@ -160,6 +173,13 @@ class ScheduleController extends Controller
         //
     }
 
+    /**
+     * Search schedules by station
+     * 
+     * @param  Illuminate\Http\Request                                  $request
+     * @param  \App\Repositories\Contracts\StationRepositoryInterface   $stationRepository
+     * @return \Illuminate\Http\Response | \Illuminate\Support\Collection
+     */
     public function search(Request $request, StationRepositoryInterface $stationRepository)
     {
         $departure = $request->input('departure');

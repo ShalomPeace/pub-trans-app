@@ -1,8 +1,8 @@
 App.factory('AuthFactory', 
 
-['$rootScope', '$http', '$timeout',
+['$rootScope', '$http', '$timeout', 'ResponseService',
 
-function ($rootScope, $http, $timeout) {
+function ($rootScope, $http, $timeout, ResponseService) {
 	var baseUrl = $rootScope.baseUrl;
 
 	var auth = {};
@@ -19,9 +19,7 @@ function ($rootScope, $http, $timeout) {
 
 	auth.request = function(config, callback) {
 		$http(config).then(function(response) {
-			$timeout(function() {
-				callback(response);
-			}, 1000);
+			ResponseService.handle(response.data, callback);
 		});
 	};
 

@@ -22,6 +22,7 @@ class CreateSchedulesTable extends Migration
             $table->date('arrival_date');
             $table->time('arrival_time');
             $table->integer('operator_id')->unsigned()->index();
+            $table->string('status', 20);
             $table->timestamps();
             $table->integer('user_id')->unsigned()->index();
 

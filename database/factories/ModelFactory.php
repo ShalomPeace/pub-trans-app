@@ -13,10 +13,17 @@
 
 $factory->define(App\Models\User::class, function (Faker\Generator $faker) {
     return [
-        'name' => $faker->name,
         'username' => 'admin',
-        'email_address' => $faker->safeEmail,
         'password' => bcrypt('secret'),
         'remember_token' => str_random(10),
+    ];
+});
+
+$factory->define(App\Models\Operator::class, function (Faker\Generator $faker) {
+    return [
+        'first_name'	=> $faker->firstName, 
+        'last_name'		=> $faker->lastName, 
+        'active'		=> 1, 
+        'user_id'		=> 1,
     ];
 });
