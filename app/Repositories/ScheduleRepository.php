@@ -33,7 +33,7 @@ class ScheduleRepository extends Repository implements ScheduleRepositoryInterfa
 
     public function search($departure, $arrival)
     {
-        $query = $this->model;
+        $query = $this->model->with('departure_station', 'arrival_station', 'train', 'operator');
 
         if ($departure) {
             $query = $query->where('departure_station_id', $departure);
@@ -45,6 +45,6 @@ class ScheduleRepository extends Repository implements ScheduleRepositoryInterfa
 
         $results = $query->get();
 
-        return $this->getFormattedData($results);
+        return ! $results->isEmpty() ? $results : [];
     }
 }
