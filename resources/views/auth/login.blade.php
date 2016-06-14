@@ -2,16 +2,12 @@
 
 @section('content')
     <section class="row" ng-controller="AuthController">
-        <div class="col s12 m8 l6 offset-l3 offset-m4">
+        <div class="col s12 m8 l6 offset-l3 offset-m2">
             <section class="widget">
                 <main class="widget-body">
                     <section class="row row-no-mb">
                         <div class="col s12 m12 l10 offset-l1">
-                            <section class="row">
-                                <div class="col s12">
-                                    <p ng-repeat="message in messages" class="@{{ message.type }}-message center-align">@{{ message.message }}</p>
-                                </div>
-                            </section>
+                            @include('../partials.messages')
                             <form action="{!! route('login.attempt') !!}" method="POST" ng-submit="login($event)" name="loginForm">
                                 {!! csrf_field() !!}
                                 <section class="row">

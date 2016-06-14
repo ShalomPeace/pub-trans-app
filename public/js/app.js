@@ -70,9 +70,9 @@ function ($rootScope, $http, $timeout, ResponseService)
 }]);
 App.factory('AuthFactory', 
 
-['$rootScope', '$http', '$timeout',
+['$rootScope', '$http', '$timeout', 'ResponseService',
 
-function ($rootScope, $http, $timeout) {
+function ($rootScope, $http, $timeout, ResponseService) {
 	var baseUrl = $rootScope.baseUrl;
 
 	var auth = {};
@@ -89,9 +89,7 @@ function ($rootScope, $http, $timeout) {
 
 	auth.request = function(config, callback) {
 		$http(config).then(function(response) {
-			$timeout(function() {
-				callback(response);
-			}, 1000);
+			ResponseService.handle(response.data, callback);
 		});
 	};
 
@@ -145,18 +143,18 @@ App.service('ResponseService',
 function ($rootScope, $timeout) 
 {
 	this.handle = function(response, callback) {
-		console.log(response);
+		if (typeof callback === 'function') callback(response);
 
 		if (response.status) {
 			$rootScope.messages.add('success', response.message);
-
-			if (typeof callback === 'function') callback(response);
 
 			if (response.redirect) {
 				$timeout(function() {
 					window.location = response.redirect;
 				}, 1000);
 			}
+
+			return;
 		} else {
 			$rootScope.loading = false;
 
@@ -245,6 +243,17 @@ App.directive('btnLink', [function () {
 	};
 }]);
 
+App.directive('btnNav', [function () {
+	return {
+		template: '<a href="#" class="button-collapse" ng-transclude></a>',
+		replace: true,
+		transclude: true,
+		restrict: 'EA',
+		link: function postLink(scope, iElement, iAttrs) {
+			iElement.sideNav();
+		}
+	};
+}]);
 App.directive('materialSelect', ['$timeout', function ($timeout) {
 	return {
 		template: '<select></select>',
@@ -282,26 +291,8 @@ function ($scope, $timeout, AuthFactory) {
 		event.preventDefault();
 
 		$scope.loading = true;
-		$scope.messages = [];
-		AuthFactory.login($scope.form, function(response) {
-			if (response.data.status) {
-				$scope.messages.push({
-					type: 'success', 
-					message: response.data.message,
-				});
 
-				$timeout(function() {
-					window.location = $scope.baseUrl;
-				}, 1000);
-			} else {
-				$scope.loading = false;
-
-				$scope.messages.push({
-					type: 'error', 
-					message: response.data.message,
-				});
-			}
-		});
+		AuthFactory.login($scope.form);
 	};
 
 	window.scope = $scope;
@@ -389,21 +380,7 @@ function ($scope, $timeout, StationFactory)
 
 		$scope.loading = true;
 
-		var method = StationFactory[type];
-
-		method($scope.form, function(response) {
-			if (response.status) {
-				$scope.messages.add('success', response.message);
-			
-				$timeout(function() {
-					window.location = response.redirect;
-				}, 1000);
-			} else {
-				$scope.loading = false;
-
-				$scope.messages.add('error', response.message);
-			}
-		});
+		StationFactory[type]($scope.form);
 	};
 	
 	window.scope = $scope;
@@ -419,19 +396,7 @@ function ($scope, $timeout, TrainFactory)
 
 		$scope.loading = true;
 
-		TrainFactory[type]($scope.form, function(response) {
-			if (response.status) {
-				$scope.messages.add('success', response.message);
-
-				$timeout(function() {
-					window.location = response.redirect;
-				}, 1000);
-			} else {
-				$scope.loading = false;
-
-				$scope.messages.add('error', response.message);
-			}
-		});
+		TrainFactory[type]($scope.form);
 	};
 
 	window.scope = $scope;
