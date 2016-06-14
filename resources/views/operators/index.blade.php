@@ -36,7 +36,7 @@
                                         </td>
                                     </tr>
                                     <tr ng-if=" ! operators.length">
-                                        <td colspan="{{ auth()->check() ? 4 : 3 }}" align="center">No operators found.</td>
+                                        <td colspan="{{ auth()->check() ? 4 : 3 }}" class="center">No operators found.</td>
                                     </tr>
                                 </tbody>
                             </table>
