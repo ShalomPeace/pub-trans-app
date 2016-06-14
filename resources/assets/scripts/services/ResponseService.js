@@ -5,18 +5,18 @@ App.service('ResponseService',
 function ($rootScope, $timeout) 
 {
 	this.handle = function(response, callback) {
-		console.log(response);
+		if (typeof callback === 'function') callback(response);
 
 		if (response.status) {
 			$rootScope.messages.add('success', response.message);
-
-			if (typeof callback === 'function') callback(response);
 
 			if (response.redirect) {
 				$timeout(function() {
 					window.location = response.redirect;
 				}, 1000);
 			}
+
+			return;
 		} else {
 			$rootScope.loading = false;
 
