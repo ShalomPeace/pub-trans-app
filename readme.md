@@ -12,6 +12,8 @@ $ php artisan migrate
 $ php artisan db:seed
 ```
 
+Rename .env.example to .env
+
 
 
 
